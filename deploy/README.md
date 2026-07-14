@@ -75,3 +75,98 @@ kubectl apply -f deploy/k3s/configmap.yaml
 kubectl apply -f deploy/k3s/secrets.yaml
 kubectl rollout restart deployment -n cat-sys
 ```
+
+
+---
+
+## K3s ?????Rocky Linux 9?
+
+### ????
+
+```bash
+# 1. Rocky Linux 9 ?? Docker
+sudo dnf install -y dnf-utils
+sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo dnf install -y docker-ce docker-ce-cli containerd.io
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo usermod -aG docker $USER
+
+# 2. ?? K3s?????
+curl -sfL https://get.k3s.io | sh -
+sudo chmod 644 /etc/rancher/k3s/k3s.yaml
+
+# 3. ??
+kubectl get nodes
+sudo k3s check-config
+
+# 4. ???????????
+sudo firewall-cmd --zone=public --add-port=30002/tcp --permanent
+sudo firewall-cmd --reload
+
+# 5. ?? SELinux?????????
+sudo setenforce 0
+```
+
+### ????
+
+```bash
+git clone <??????> /opt/cat-sys
+cd /opt/cat-sys
+cp config/development.env .env
+```
+
+### ????
+
+```bash
+./deploy/scripts/build-all.sh
+```
+
+### ??? K3s
+
+```bash
+./deploy/scripts/deploy-all.sh
+```
+
+### ??
+
+```bash
+# ??????
+kubectl get all -n cat-sys
+
+# ?? Pod ??
+kubectl get pods -n cat-sys -w
+
+# ?? API
+curl http://10.0.0.120:30002/cat/health
+curl http://10.0.0.120:30002/cat/api/auth/login -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"phone":"13800000001","password":"admin123"}'
+```
+
+### ????
+
+```bash
+# ????????
+kubectl logs -n cat-sys -l app=api-gateway --tail=50
+
+# ????
+kubectl logs -n cat-sys -l app=user-service -f
+
+# ?? MySQL ??
+kubectl logs -n cat-sys -l app=mysql
+```
+
+---
+
+## ??????
+
+| ???? | ?? | ?? |
+|---------|------|------|
+| Pod ?? `ImagePullBackOff` | ????? containerd | ?? `./build-all.sh` ?????? |
+| MySQL Pod `CrashLoopBackOff` | ?????? | `kubectl delete pvc -n cat-sys mysql-pvc` ??? |
+| API ?? 503 | ??????? | `kubectl get pods -n cat-sys` ??????? Running |
+| curl ??? 30002 | ?????? | `sudo firewall-cmd --add-port=30002/tcp --permanent && sudo firewall-cmd --reload` |
+| `ModuleNotFoundError: No module named 'src'` | ????????? | ?? Dockerfile ?? `COPY src/ ./src/`????? |
+| ??????? | MySQL ??? | `kubectl wait --for=condition=ready pod -l app=mysql -n cat-sys --timeout=180s` |
+| k3s ?????? | kubeconfig ?? | `sudo chmod 644 /etc/rancher/k3s/k3s.yaml` |
