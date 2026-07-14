@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>猫咪详情 - Cat_Sys v0.1 原型</title><link rel="stylesheet" href="prototype.css"></head>
+<body>
+<div class="layout"><div class="sidebar"><div class="logo"> <span>猫咪</span>管理系统</div>
+<div class="nav-item"><span>&#x1F4CA;</span><span>仪表盘</span></div>
+<div class="nav-item active"><span>&#x1F431;</span><span>猫咪管理</span></div>
+<div class="nav-item"><span>&#x1F464;</span><span>客户管理</span></div>
+<div class="nav-item"><span>&#x1F4B0;</span><span>销售管理</span></div>
+<div class="nav-item"><span>&#x1F321;</span><span>健康管理</span></div>
+<div class="nav-item"><span>&#x1F4C8;</span><span>财务</span></div>
+<div class="nav-item"><span>&#x1F3EA;</span><span>分店管理</span></div>
+<div class="nav-item"><span>&#x1F465;</span><span>员工管理</span></div>
+<div class="nav-item"><span>&#x2699;</span><span>设置</span></div>
+</div>
+<div class="main">
+<div class="header"><div class="left"><span style="font-weight:600;color:#1890ff;">猫咪管理系统</span><span style="color:#999;font-size:13px;">猫咪CRM管理系统</span></div><div class="right"><span class="branch-selector">&#x25BC; 深圳店</span><span>张三 139****567(销售) &#x25BC;</span></div></div>
+<div class="content">
+<div class="page-title">猫咪管理 &gt; 咪咪</div>
+<div style="display:flex;gap:20px;">
+<div><div style="width:200px;height:200px;background:#f5f5f5;border:1px solid #d9d9d9;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:40px;color:#ccc;">&#x1F4F7;</div><div style="display:flex;gap:4px;margin-top:8px;"><div style="width:60px;height:60px;background:#f5f5f5;border:1px dashed #d9d9d9;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#ccc;">+</div><div style="width:60px;height:60px;background:#f5f5f5;border:1px dashed #d9d9d9;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#ccc;">+</div><div style="width:60px;height:60px;background:#f5f5f5;border:1px dashed #d9d9d9;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#ccc;">+</div></div></div>
+<div class="wf-card" style="flex:1;">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+<div class="wf-form-row"><label style="width:60px;">名字</label><div class="wf-input">咪咪</div></div>
+<div class="wf-form-row"><label style="width:60px;">品种</label><select class="wf-select" style="flex:1;"><option>布偶猫</option></select></div>
+<div class="wf-form-row"><label style="width:60px;">毛色</label><select class="wf-select" style="flex:1;"><option>蓝双</option></select></div>
+<div class="wf-form-row"><label style="width:60px;">性别</label><select class="wf-select" style="flex:1;"><option>母</option></select></div>
+<div class="wf-form-row"><label style="width:60px;">生日</label><div class="wf-input">2024-01-15</div></div>
+<div class="wf-form-row"><label style="width:60px;">芯片号</label><div class="wf-input">900123456789012</div></div>
+<div class="wf-form-row"><label style="width:60px;">血统号</label><div class="wf-input">CFA-2024-00123</div></div>
+<div class="wf-form-row"><label style="width:60px;">状态</label><select class="wf-select" style="flex:1;"><option>在售</option></select></div>
+</div>
+<div class="wf-form-row" style="margin-top:8px;"><label>售价</label><div class="wf-input" style="width:150px;">12000</div><span style="margin-left:4px;color:#999;">元</span></div>
+<div class="wf-form-divider"></div>
+<div class="wf-form-row"><label>备注</label><div class="wf-input" style="flex:1;min-height:50px;">性格温顺，已打第一针疫苗</div></div>
+<div class="wf-footer-info">最后操作人：张三 &nbsp;&nbsp; 最后操作时间：2026-07-09 14:30</div>
+<div style="text-align:right;margin-top:12px;"><span class="wf-btn">取消</span><span class="wf-btn primary">保存</span></div>
+</div></div>
+<div class="wf-card" style="margin-top:16px;"><div class="wf-card-title">健康记录</div>
+<table class="wf-table"><thead><tr><th>日期</th><th>类型</th><th>详情</th><th>下次日期</th><th>操作</th></tr></thead><tbody>
+<tr><td>2026-06-15</td><td>疫苗</td><td>FVRCP 第一针</td><td>2026-07-15</td><td><span class="wf-btn small">编辑</span></td></tr>
+<tr><td>2026-05-01</td><td>驱虫</td><td>大宠爱</td><td>2026-08-01</td><td><span class="wf-btn small">编辑</span></td></tr>
+</tbody></table>
+<div style="margin-top:8px;"><span class="wf-btn small primary">+ 新增健康记录</span></div>
+</div>
+<div class="wf-card"><div class="wf-card-title">销售记录</div><div style="font-size:13px;color:#999;">当前状态：在售（无进行中的预订或合同）</div></div>
+</div></div></div></body></html>

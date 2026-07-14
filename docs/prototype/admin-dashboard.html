@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>控制台首页 - Cat_Sys v0.1 原型</title><link rel="stylesheet" href="prototype.css"></head>
+<body>
+<div class="layout">
+<div class="sidebar">
+<div class="logo"> <span>猫咪</span>管理系统</div>
+<div class="nav-item active"><span>&#x1F4CA;</span><span>控制台</span></div>
+<div class="nav-item"><span>&#x1F3E2;</span><span>商家管理</span></div>
+<div class="nav-item"><span>&#x1F9E9;</span><span>模块管理</span></div>
+<div class="nav-item"><span>&#x2699;</span><span>系统配置</span></div>
+<div class="nav-item"><span>&#x1F4DC;</span><span>审计日志</span></div>
+<div class="nav-item"><span>&#x1F4C8;</span><span>数据统计</span></div>
+</div>
+<div class="main">
+<div class="header">
+<div class="left"><span style="font-weight:600;color:#1890ff;">猫咪管理系统后台</span></div>
+<div class="right"><span>张三 139****567(超管) &#x25BC;</span></div>
+</div>
+<div class="content">
+<div class="page-title">控制台首页</div>
+<div class="wf-grid wf-grid-4">
+<a style="text-decoration:none;" href="admin-merchants.html" class="wf-stat"><div class="num">36</div><div class="label">总商家</div></a>
+<a style="text-decoration:none;" href="admin-merchants.html#status=active" class="wf-stat"><div class="num">28</div><div class="label">活跃</div></a>
+<a style="text-decoration:none;" href="admin-merchants.html#status=expiring" class="wf-stat"><div class="num" style="color:#fa8c16;">3</div><div class="label">即将到期</div></a>
+<a style="text-decoration:none;" href="admin-merchants.html#status=new-this-month" class="wf-stat"><div class="num" style="color:#52c41a;">5</div><div class="label">本月新增</div></a>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px;">
+<div class="wf-card"><div class="wf-card-title">近期动态</div>
+<div style="font-size:13px;line-height:2.2;color:#666;">
+<div>&#x2022; 2026-07-09 14:30  商家「喵屋猫舍」已开通销售模块</div>
+<div>&#x2022; 2026-07-09 11:20  商家「布偶坊」即将到期(剩5天)</div>
+<div>&#x2022; 2026-07-08 09:00  新增商家「英短之家」</div>
+<div>&#x2022; 2026-07-07 16:00  已停用商家「XX猫舍」</div>
+</div></div>
+<div class="wf-card"><div class="wf-card-title">快速操作</div>
+<div><span class="wf-btn primary">+ 新增商家</span><span class="wf-btn">查看到期商家</span></div>
+</div></div>
+</div></div></div></body></html>

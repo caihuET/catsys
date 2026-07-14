@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>健康管理 - Cat_Sys v0.1 原型</title><link rel="stylesheet" href="prototype.css"></head>
+<body>
+<div class="layout"><div class="sidebar"><div class="logo"> <span>猫咪</span>管理系统</div>
+<div class="nav-item"><span>&#x1F4CA;</span><span>仪表盘</span></div>
+<div class="nav-item"><span>&#x1F431;</span><span>猫咪管理</span></div>
+<div class="nav-item"><span>&#x1F464;</span><span>客户管理</span></div>
+<div class="nav-item"><span>&#x1F4B0;</span><span>销售管理</span></div>
+<div class="nav-item active"><span>&#x1F321;</span><span>健康管理</span></div>
+<div class="nav-item"><span>&#x1F4C8;</span><span>财务</span></div>
+<div class="nav-item"><span>&#x1F3EA;</span><span>分店管理</span></div>
+<div class="nav-item"><span>&#x1F465;</span><span>员工管理</span></div>
+<div class="nav-item"><span>&#x2699;</span><span>设置</span></div>
+</div>
+<div class="main">
+<div class="header"><div class="left"><span style="font-weight:600;color:#1890ff;">猫咪管理系统</span><span style="color:#999;font-size:13px;">猫咪CRM管理系统</span></div><div class="right"><span class="branch-selector">&#x25BC; 深圳店</span><span>张三 139****567(销售) &#x25BC;</span></div></div>
+<div class="content">
+<div class="page-title">健康管理</div>
+<div class="wf-toolbar"><div class="filters"><select class="wf-select"><option>全部猫咪</option></select><select class="wf-select"><option>全部类型</option></select><div class="wf-input" style="width:130px;">猫咪名字</div><select class="wf-select"><option>全部类型</option></select><select class="wf-select"><option>全部医生</option></select><div class="wf-input" style="width:130px;">开始日期</div><div class="wf-input" style="width:130px;">结束日期</div></div><div class="actions"><span class="wf-btn primary small">+ 新增记录</span></div></div>
+<table class="wf-table"><thead><tr><th>ID</th><th>猫咪</th><th>类型</th><th>日期</th><th>下次日期</th><th>相距</th><th>医生/诊所</th><th>操作</th></tr></thead><tbody>
+<tr><td>1</td><td>咪咪</td><td>疫苗</td><td>2026-06-15</td><td>2026-07-15</td><td style="color:#fa8c16;">剩余4天</td><td>张医生</td><td><span class="wf-btn small">编辑</span></td></tr>
+<tr><td>2</td><td>咪咪</td><td>驱虫</td><td>2026-05-01</td><td>2026-08-01</td><td style="color:#52c41a;">剩余21天</td><td>王医生</td><td><span class="wf-btn small">编辑</span></td></tr>
+<tr><td>3</td><td>花花</td><td>就医</td><td>2026-06-20</td><td>-</td><td>-</td><td>李医生</td><td><span class="wf-btn small">编辑</span></td></tr>
+</tbody></table>
+<div style="font-size:12px;color:#999;padding:8px;background:#fafafa;border-radius:4px;margin-top:8px;">注：医生信息从对应分店下员工获取，可下拉选择</div>
+<div class="wf-alert warn" style="margin-top:16px;">&#x26A0; 近期提醒：咪咪 - 下次疫苗 2026-07-15(剩余6天) &nbsp;|&nbsp; 咪咪 - 下次驱虫 2026-08-01(剩余23天)</div>
+</div></div></div></body></html>

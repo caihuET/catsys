@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>待办任务 - 猫咪管理系统 v0.1 原型</title>
+<link rel="stylesheet" href="prototype.css">
+</head>
+<body>
+<div class="layout">
+<div class="sidebar"><div class="logo"> <span>猫咪</span>管理系统</div>
+<div class="nav-item"><span>&#x1F4CA;</span><span>仪表盘</span></div>
+<div class="nav-item"><span>&#x1F431;</span><span>猫咪管理</span></div>
+<div class="nav-item"><span>&#x1F464;</span><span>客户管理</span></div>
+<div class="nav-item"><span>&#x1F4B0;</span><span>销售管理</span></div>
+<div class="nav-item"><span>&#x1F321;</span><span>健康管理</span></div>
+<div class="nav-item"><span>&#x1F4C8;</span><span>财务</span></div>
+<div class="nav-item active"><span>&#x1F4CB;</span><span>待办任务</span></div>
+<div class="nav-item"><span>&#x1F3EA;</span><span>分店管理</span></div>
+<div class="nav-item"><span>&#x1F465;</span><span>员工管理</span></div>
+<div class="nav-item"><span>&#x2699;</span><span>设置</span></div>
+</div>
+<div class="main">
+<div class="header"><div class="left"><span style="font-weight:600;color:#1890ff;">猫咪管理系统</span><span style="color:#999;font-size:13px;">猫咪CRM管理系统</span></div>
+<div class="right"><span class="branch-selector">&#x25BC; 深圳店</span><span>张三 139****567(销售)</span><span class="wf-btn small" style="margin-left:8px;">退出</span></div></div>
+<div class="content">
+<div class="page-title">待办任务</div>
+<div class="wf-toolbar"><div class="filters">
+<select class="wf-select"><option>全部类型</option><option>疫苗提醒</option><option>驱虫提醒</option><option>客户回访</option><option>购猫回访</option><option>自定义</option></select>
+<select class="wf-select"><option>全部状态</option><option>待处理</option><option>已完成</option></select>
+<div class="wf-input" style="width:130px;">截止日期从</div>
+<div class="wf-input" style="width:130px;">截止日期到</div>
+</div><div class="actions"><span class="wf-btn primary small">+ 新建任务</span></div></div>
+<table class="wf-table"><thead><tr><th>ID</th><th>任务类型</th><th>关联对象</th><th>描述</th><th>截止日期</th><th>剩余</th><th>状态</th><th>操作</th></tr></thead><tbody>
+<tr><td>1</td><td><span class="wf-badge blue">疫苗提醒</span></td><td>咪咪</td><td>FVRCP第二针</td><td>2026-07-15</td><td style="color:#fa8c16;">剩余4天</td><td><span class="wf-badge orange">待处理</span></td><td><span class="wf-btn small">标记完成</span></td></tr>
+<tr><td>2</td><td><span class="wf-badge green">驱虫提醒</span></td><td>咪咪</td><td>大宠爱驱虫</td><td>2026-08-01</td><td style="color:#52c41a;">剩余21天</td><td><span class="wf-badge orange">待处理</span></td><td><span class="wf-btn small">标记完成</span></td></tr>
+<tr><td>3</td><td><span class="wf-badge" style="background:#fff7e6;color:#fa8c16;border:1px solid #ffd591;">客户回访</span></td><td>李华</td><td>购猫后第一次回访</td><td>2026-07-20</td><td style="color:#52c41a;">剩余10天</td><td><span class="wf-badge orange">待处理</span></td><td><span class="wf-btn small">标记完成</span></td></tr>
+<tr><td>4</td><td><span class="wf-badge" style="background:#e6f7ff;color:#1890ff;border:1px solid #91d5ff;">购猫回访</span></td><td>王芳</td><td>已到店看猫，继续跟进</td><td>2026-07-25</td><td style="color:#52c41a;">剩余15天</td><td><span class="wf-badge orange">待处理</span></td><td><span class="wf-btn small">标记完成</span></td></tr>
+<tr><td>5</td><td><span class="wf-badge blue">疫苗提醒</span></td><td>布丁</td><td>FVRCP第三针</td><td>2026-06-20</td><td style="color:#ff4d4f;">已过期19天</td><td><span class="wf-badge red">已过期</span></td><td><span style="color:#ccc;font-size:12px;">已无效</span></td></tr>
+</tbody></table>
+<div style="margin-top:12px;font-size:13px;color:#999;display:flex;justify-content:space-between;"><span>共 5 条，其中 待处理 4 条、已过期 1 条</span><span>&lt; 1 &gt;</span></div>
+<div class="wf-footer-info">注：任务来源于健康记录提醒、客户跟进自动生成，也可手动新建</div>
+</div></div></div>
+</body>
+</html>

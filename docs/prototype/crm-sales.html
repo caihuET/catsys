@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>销售管理 - Cat_Sys v0.1 原型</title><link rel="stylesheet" href="prototype.css"></head>
+<body>
+<div class="layout"><div class="sidebar"><div class="logo"> <span>猫咪</span>管理系统</div>
+<div class="nav-item"><span>&#x1F4CA;</span><span>仪表盘</span></div>
+<div class="nav-item"><span>&#x1F431;</span><span>猫咪管理</span></div>
+<div class="nav-item"><span>&#x1F464;</span><span>客户管理</span></div>
+<div class="nav-item active"><span>&#x1F4B0;</span><span>销售管理</span></div>
+<div class="nav-item"><span>&#x1F321;</span><span>健康管理</span></div>
+<div class="nav-item"><span>&#x1F4C8;</span><span>财务</span></div>
+<div class="nav-item"><span>&#x1F3EA;</span><span>分店管理</span></div>
+<div class="nav-item"><span>&#x1F465;</span><span>员工管理</span></div>
+<div class="nav-item"><span>&#x2699;</span><span>设置</span></div>
+</div>
+<div class="main">
+<div class="header"><div class="left"><span style="font-weight:600;color:#1890ff;">猫咪管理系统</span><span style="color:#999;font-size:13px;">猫咪CRM管理系统</span></div><div class="right"><span class="branch-selector">&#x25BC; 深圳店</span><span>张三 139****567(销售) &#x25BC;</span></div></div>
+<div class="content">
+<div class="page-title">销售管理 &gt; 预订管理</div>
+<div class="wf-toolbar"><div class="filters"><select class="wf-select"><option>全部状态</option></select><div class="wf-input" style="width:130px;">开始日期</div><div class="wf-input" style="width:130px;">结束日期</div></div><div class="actions"><span class="wf-btn primary small">+ 创建预订</span><span class="wf-btn small">+ 创建合同</span></div></div>
+<table class="wf-table"><thead><tr><th>ID</th><th>客户</th><th>猫咪</th><th>定金</th><th>总价</th><th>状态</th><th>操作</th></tr></thead><tbody>
+<tr><td>1</td><td>王芳</td><td>咪咪</td><td>&yen;2,000</td><td>&yen;12,000</td><td><span class="wf-badge blue">已付定金</span></td><td><span class="wf-btn small">签合同</span></td></tr>
+<tr><td>2</td><td>赵六</td><td>花花</td><td>&yen;0</td><td>-</td><td><span class="wf-badge orange">进行中</span></td><td><span class="wf-btn small">编辑</span></td></tr>
+<tr><td>3</td><td>孙七</td><td>布丁</td><td>&yen;3,000</td><td>&yen;15,000</td><td><span class="wf-badge green">已完成</span></td><td><span class="wf-btn small">查看</span></td></tr>
+</tbody></table></div></div></div>
+<div class="wf-modal-overlay"><div class="wf-modal">
+<div class="wf-modal-header">创建预订</div>
+<div class="wf-modal-body">
+<div class="wf-form-row"><label>客户</label><select class="wf-select" style="flex:1;"><option>请选择客户</option></select><span class="wf-btn small" style="margin-left:4px;">+新增</span></div>
+<div class="wf-form-row"><label>猫咪</label><select class="wf-select" style="flex:1;"><option>请选择猫咪</option></select></div>
+<div class="wf-form-row"><label>预订日期</label><div class="wf-input" style="flex:1;">2026-07-09</div></div>
+<div class="wf-form-row"><label>定金金额</label><div class="wf-input" style="flex:1;width:150px;">2000</div><span style="margin-left:4px;color:#999;">元</span></div>
+<div class="wf-form-row"><label>备注</label><div class="wf-input" style="flex:1;">备注信息</div></div>
+</div>
+<div class="wf-modal-footer"><span class="wf-btn">取消</span><span class="wf-btn primary">提交</span></div>
+</div></div></body></html>

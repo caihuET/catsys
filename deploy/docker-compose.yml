@@ -1,0 +1,105 @@
+version: "3.8"
+
+services:
+  # ===== Infrastructure =====
+  mysql:
+    image: mysql:8.0
+    container_name: cat-sys-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: \${MYSQL_PASSWORD:-dev_password_123}
+      MYSQL_DATABASE: \${MYSQL_DATABASE:-cat_sys}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - cat-sys-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: cat-sys-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - cat-sys-net
+
+  # ===== Microservices =====
+  user-service:
+    build: ../services/user-service
+    container_name: cat-sys-user
+    restart: unless-stopped
+    depends_on: [mysql, redis]
+    env_file: ../.env
+    networks:
+      - cat-sys-net
+
+  merchant-service:
+    build: ../services/merchant-service
+    container_name: cat-sys-merchant
+    restart: unless-stopped
+    depends_on: [mysql]
+    env_file: ../.env
+    networks:
+      - cat-sys-net
+
+  cat-service:
+    build: ../services/cat-service
+    container_name: cat-sys-cat
+    restart: unless-stopped
+    depends_on: [mysql]
+    env_file: ../.env
+    networks:
+      - cat-sys-net
+
+  crm-service:
+    build: ../services/crm-service
+    container_name: cat-sys-crm
+    restart: unless-stopped
+    depends_on: [mysql]
+    env_file: ../.env
+    networks:
+      - cat-sys-net
+
+  finance-service:
+    build: ../services/finance-service
+    container_name: cat-sys-finance
+    restart: unless-stopped
+    depends_on: [mysql]
+    env_file: ../.env
+    networks:
+      - cat-sys-net
+
+  dashboard-service:
+    build: ../services/dashboard-service
+    container_name: cat-sys-dashboard
+    restart: unless-stopped
+    depends_on: [mysql]
+    env_file: ../.env
+    networks:
+      - cat-sys-net
+
+  api-gateway:
+    build: ../api-gateway
+    container_name: cat-sys-gateway
+    restart: unless-stopped
+    ports:
+      - "\${API_GATEWAY_PORT:-9002}:9002"
+    depends_on:
+      - user-service
+      - merchant-service
+      - cat-service
+      - crm-service
+      - finance-service
+      - dashboard-service
+    env_file: ../.env
+    networks:
+      - cat-sys-net
+
+volumes:
+  mysql-data:
+
+networks:
+  cat-sys-net:
+    driver: bridge

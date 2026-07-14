@@ -1,0 +1,17 @@
+
+# Environment
+.env
+config/production.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+
+# Docker
+*.log

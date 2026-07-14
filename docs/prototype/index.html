@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Cat_Sys v0.1 原型导航</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,"Microsoft YaHei",sans-serif;background:#f0f2f5;color:#333;padding:40px;font-size:14px;max-width:960px;margin:0 auto;}
+h1{font-size:26px;margin-bottom:4px;}
+.sub{color:#999;margin-bottom:32px;}
+.section{margin-bottom:32px;}
+.section h2{font-size:16px;margin-bottom:12px;color:#1890ff;border-bottom:2px solid #1890ff;padding-bottom:6px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;}
+.card{background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:16px;text-align:center;transition:box-shadow 0.2s;}
+.card:hover{box-shadow:0 4px 12px rgba(0,0,0,0.1);}
+.card .icon{font-size:28px;margin-bottom:6px;}
+.card .name{font-weight:600;font-size:14px;}
+.card .desc{font-size:12px;color:#999;margin-top:4px;}
+a{text-decoration:none;color:inherit;display:block;}
+.note{background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;padding:16px;font-size:13px;color:#666;margin-top:24px;}
+</style></head>
+<body>
+<h1>Cat_Sys v0.1 &#x539F;&#x578B;&#x8BBE;&#x8BA1;</h1>
+<div class="sub">&#x70B9;&#x51FB;&#x9875;&#x9762;&#x5361;&#x7247;&#x67E5;&#x770B;&#x539F;&#x578B;&#x56FE; &bull; &#x5171; 15 &#x4E2A;&#x9875;&#x9762;</div>
+
+<div class="section"><h2>&#x1F512; &#x516C;&#x5171;&#x9875;&#x9762;</h2>
+<div class="grid">
+<a href="login.html"><div class="card"><div class="icon">&#x1F512;</div><div class="name">&#x767B;&#x5F55;&#x9875;</div><div class="desc">Login</div></div></a>
+<a href="register.html"><div class="card"><div class="icon">&#x270F;</div><div class="name">&#x6CE8;&#x518C;&#x9875;</div><div class="desc">Register</div></div></a>
+</div></div>
+
+<div class="section"><h2>&#x1F6E0; &#x5F00;&#x53D1;&#x8005;&#x63A7;&#x5236;&#x53F0; (Super Admin)</h2>
+<div class="grid">
+<a href="admin-dashboard.html"><div class="card"><div class="icon">&#x1F4CA;</div><div class="name">&#x63A7;&#x5236;&#x53F0;&#x9996;&#x9875;</div><div class="desc">Dashboard</div></div></a>
+<a href="admin-merchants.html"><div class="card"><div class="icon">&#x1F3E2;</div><div class="name">&#x5546;&#x5BB6;&#x5217;&#x8868;</div><div class="desc">Merchant List</div></div></a>
+<a href="admin-merchant-create.html"><div class="card"><div class="icon">&#x2795;</div><div class="name">&#x521B;&#x5EFA;&#x5546;&#x5BB6;</div><div class="desc">Create Merchant</div></div></a>
+<a href="admin-merchant-detail.html"><div class="card"><div class="icon">&#x1F50D;</div><div class="name">&#x5546;&#x5BB6;&#x8BE6;&#x60C5;</div><div class="desc">Merchant Detail</div></div></a>
+</div></div>
+
+<div class="section"><h2>&#x1F431; &#x732B;&#x54AA;CRM&#x7CFB;&#x7EDF;</h2>
+<div class="grid">
+<a href="crm-dashboard.html"><div class="card"><div class="icon">&#x1F4CA;</div><div class="name">CRM&#x4EEA;&#x8868;&#x76D8;</div><div class="desc">Dashboard</div></div></a>
+<a href="crm-cats.html"><div class="card"><div class="icon">&#x1F431;</div><div class="name">&#x732B;&#x54AA;&#x5217;&#x8868;</div><div class="desc">Cat List</div></div></a>
+<a href="crm-cat-detail.html"><div class="card"><div class="icon">&#x1F4DD;</div><div class="name">&#x732B;&#x54AA;&#x8BE6;&#x60C5;</div><div class="desc">Cat Detail</div></div></a>
+<a href="crm-customers.html"><div class="card"><div class="icon">&#x1F464;</div><div class="name">&#x5BA2;&#x6237;&#x5217;&#x8868;</div><div class="desc">Customer List</div></div></a>
+<a href="crm-customer-detail.html"><div class="card"><div class="icon">&#x1F9D1;</div><div class="name">&#x5BA2;&#x6237;&#x8BE6;&#x60C5;</div><div class="desc">Customer Detail</div></div></a>
+<a href="crm-sales.html"><div class="card"><div class="icon">&#x1F4B0;</div><div class="name">&#x9500;&#x552E;&#x7BA1;&#x7406;</div><div class="desc">Sales + &#x9884;&#x8BA2;&#x5F39;&#x7A97;</div></div></a>
+<a href="crm-health.html"><div class="card"><div class="icon">&#x1F321;</div><div class="name">&#x5065;&#x5EB7;&#x7BA1;&#x7406;</div><div class="desc">Health Records</div></div></a>
+<a href="crm-branches.html"><div class="card"><div class="icon">&#x1F3EA;</div><div class="name">&#x5206;&#x5E97;&#x7BA1;&#x7406;</div><div class="desc">Branches</div></div></a>
+<a href="crm-employees.html"><div class="card"><div class="icon">&#x1F465;</div><div class="name">&#x5458;&#x5DE5;&#x7BA1;&#x7406;</div><div class="desc">Employees + &#x6DFB;&#x52A0;&#x5F39;&#x7A97;</div></div></a>
+</div></div>
+
+<div class="note"><strong>&#x1F4DD; &#x8BF4;&#x660E;&#xFF1A;</strong>&#x6BCF;&#x4E2A;&#x9875;&#x9762;&#x5747;&#x5305;&#x542B;&#x5BFC;&#x822A;&#x680F;(&#x5DE6;&#x4FA7;&#x83DC;&#x5355;) + &#x9876;&#x90E8;&#x680F;(&#x5206;&#x5E97;&#x5207;&#x6362;&#x4E0B;&#x62C9;&#x6846;+&#x7528;&#x6237;&#x4FE1;&#x606F;) + &#x5185;&#x5BB9;&#x533A;&#x57DF;&#x3002;&#x7070;&#x8272;&#x4E3A;&#x7EBF;&#x6846;&#x56FE;&#x98CE;&#x683C;&#xFF0C;&#x4EC5;&#x5C55;&#x793A;&#x5E03;&#x5C40;&#x548C;&#x529F;&#x80FD;&#x6A21;&#x5757;&#xFF0C;&#x975E;&#x6700;&#x7EC8;&#x89C6;&#x89C9;&#x8BBE;&#x8BA1;&#x3002;</div>
+</body></html>

@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cat-service
+  namespace: cat-sys
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cat-service
+  template:
+    metadata:
+      labels:
+        app: cat-service
+    spec:
+      containers:
+      - name: cat-service
+        image: cat-sys/cat-service:v0.1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5003
+        envFrom:
+        - configMapRef:
+            name: cat-sys-config
+        - secretRef:
+            name: cat-sys-secrets
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5003
+          initialDelaySeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5003
+          initialDelaySeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cat-service
+  namespace: cat-sys
+spec:
+  selector:
+    app: cat-service
+  ports:
+  - port: 5003
+    targetPort: 5003

@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cat-sys-ingress
+  namespace: cat-sys
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: xui6.bbbus.top
+    http:
+      paths:
+      - path: /cat
+        pathType: Prefix
+        backend:
+          service:
+            name: api-gateway
+            port:
+              number: 9002
+  # ????(VM???, ??NodePort 30002??)
