@@ -29,34 +29,52 @@ body{font-family:-apple-system,"Microsoft YaHei",sans-serif;min-height:100vh;dis
 <div class="field"><label>联系人</label><input id="contact" placeholder="联系人姓名"></div>
 <div class="field"><label>密码</label><input id="password" type="password" placeholder="设置登录密码"></div>
 <div class="field"><label>确认密码</label><input id="confirm" type="password" placeholder="再次输入密码"></div>
-<div class="hint">提示：同一IP 24小时内最多注册10个账号</div>
 <div style="font-size:12px;color:#999;text-align:center;margin:8px 0">注册即表示同意《服务协议》</div>
 <button class="btn" onclick="doRegister()">注册并开通</button>
 <div class="link"><a href="/">已有账号？去登录</a></div>
 </div>
 <script>
+function getClientId() {
+    let id = localStorage.getItem("cat_sys_client_id");
+    if (!id) { id = "dev_" + Date.now() + "_" + Math.random().toString(36).slice(2,8); localStorage.setItem("cat_sys_client_id", id); }
+    return id;
+}
 function getCode() {
+    const phone = document.getElementById("phone").value;
+    if (!phone || phone.length < 11) { alert("请输入正确的手机号"); return; }
     const btn = document.getElementById("codeBtn");
     btn.disabled = true;
-    let sec = 59;
-    btn.textContent = sec + "s";
-    const t = setInterval(() => { sec--; btn.textContent = sec + "s"; if(sec<=0){clearInterval(t);btn.disabled=false;btn.textContent="获取验证码";} }, 1000);
+    btn.textContent = "发送中...";
+    api("/auth/send-code", { method: "POST", body: JSON.stringify({ phone, type: "register" }) }).then(r => {
+        if (r.code === 0) {
+            let sec = 59;
+            btn.textContent = sec + "s";
+            const t = setInterval(() => { sec--; btn.textContent = sec + "s"; if(sec<=0){clearInterval(t);btn.disabled=false;btn.textContent="获取验证码";} }, 1000);
+        } else {
+            alert(r.detail || "发送失败");
+            btn.disabled = false;
+            btn.textContent = "获取验证码";
+        }
+    }).catch(() => { btn.disabled = false; btn.textContent = "获取验证码"; });
 }
 async function doRegister() {
     const phone = document.getElementById("phone").value;
+    const code = document.getElementById("code").value;
     const name = document.getElementById("name").value;
     const contact = document.getElementById("contact").value;
     const pass = document.getElementById("password").value;
     const confirm = document.getElementById("confirm").value;
-    if (!phone || !name || !contact || !pass) { alert("请填写所有必填项"); return; }
+    if (!phone || !code || !name || !contact || !pass) { alert("请填写所有必填项"); return; }
     if (pass !== confirm) { alert("两次密码不一致"); return; }
     const res = await api("/auth/register", {
         method: "POST",
-        body: JSON.stringify({ phone, password: pass, business_name: name, contact_person: contact })
+        body: JSON.stringify({ phone, password: pass, business_name: name, contact_person: contact, code, client_id: getClientId() })
     });
     if (res.code === 0) {
         alert("注册成功，请登录");
         window.location.href = "/";
+    } else if (res.detail && res.detail.indexOf("最多注册") >= 0) {
+        alert(res.detail);
     } else {
         alert(res.detail || "注册失败");
     }

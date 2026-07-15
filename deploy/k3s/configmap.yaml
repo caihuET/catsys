@@ -16,6 +16,9 @@ data:
   JWT_ALGORITHM: "HS256"
   JWT_EXPIRY_MINUTES: "30"
   ENV_MODE: "production"
+
+  ALIYUN_SMS_SIGN_NAME: "恒创联众"       # <-- 新增
+  ALIYUN_SMS_TEMPLATE_CODE: "100001"     # <-- 新增
   # ??????????????
   DOMAIN: "xui6.bbbus.top"
   SERVER_HOST: "67.219.106.150"
