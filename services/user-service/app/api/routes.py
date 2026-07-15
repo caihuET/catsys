@@ -5,7 +5,7 @@ from src.shared.database import get_db_sync
 from src.shared.models import User, Employee, Merchant
 import bcrypt, jwt, datetime
 
-logger = logging.getLogger(" user-service.api\)
+logger = logging.getLogger("user-service.api")
 
 router = APIRouter()
 
