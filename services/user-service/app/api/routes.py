@@ -39,8 +39,13 @@ def login(req: LoginRequest):
     if user.status == "disabled":
         raise HTTPException(status_code=403, detail="账号已被禁用")
     emp = db.query(Employee).filter(Employee.user_id == user.id).first()
-    merchant_id = emp.merchant_id if emp else 0
-    role_code = emp.role_code if emp else user.user_type
+    if emp:
+        merchant_id = emp.merchant_id
+        role_code = emp.role_code
+    else:
+        m = db.query(Merchant).filter(Merchant.owner_user_id == user.id).first()
+        merchant_id = m.id if m else 0
+        role_code = user.user_type
     token = create_token(user.id, merchant_id, role_code)
     user.last_login = datetime.datetime.utcnow()
     db.commit()
