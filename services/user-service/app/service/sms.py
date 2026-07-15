@@ -48,15 +48,16 @@ def send_sms(phone: str) -> dict:
     验证码由阿里云服务端生成并返回，我们将其存入 Redis 用于后续校验"""
     try:
         from alibabacloud_dypnsapi20170525.client import Client as DypnsapiClient
-        from alibabacloud_credentials.client import Client as CredentialClient
-        from alibabacloud_tea_openapi import models as open_api_models
+                from alibabacloud_tea_openapi import models as open_api_models
         from alibabacloud_dypnsapi20170525 import models as dypnsapi_models
         from alibabacloud_tea_util import models as util_models
         from alibabacloud_tea_util.client import Client as UtilClient
 
         # 凭据方式（自动读取环境变量 ALIBABA_CLOUD_ACCESS_KEY_ID/SECRET）
-        credential = CredentialClient()
-        config = open_api_models.Config(credential=credential)
+        config = open_api_models.Config(
+            access_key_id=settings.aliyun_sms_access_key_id,
+            access_key_secret=settings.aliyun_sms_access_key_secret,
+        )
         config.endpoint = "dypnsapi.aliyuncs.com"
         client = DypnsapiClient(config)
 

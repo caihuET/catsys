@@ -24,8 +24,8 @@ class AppConfig:
     jwt_secret: str = field(default_factory=lambda: os.getenv("JWT_SECRET", "dev-secret"))
     jwt_algorithm: str = field(default_factory=lambda: os.getenv("JWT_ALGORITHM", "HS256"))
     # 阿里云短信配置
-    aliyun_sms_access_key_id: str = field(default_factory=lambda: os.getenv("ALIYUN_SMS_ACCESS_KEY_ID", ""))
-    aliyun_sms_access_key_secret: str = field(default_factory=lambda: os.getenv("ALIYUN_SMS_ACCESS_KEY_SECRET", ""))
+    aliyun_sms_access_key_id: str = field(default_factory=lambda: os.getenv("ALIYUN_SMS_ACCESS_KEY_ID", os.getenv("ALIBABA_CLOUD_ACCESS_KEY_ID", "")))
+    aliyun_sms_access_key_secret: str = field(default_factory=lambda: os.getenv("ALIYUN_SMS_ACCESS_KEY_SECRET", os.getenv("ALIBABA_CLOUD_ACCESS_KEY_SECRET", "")))
     aliyun_sms_sign_name: str = field(default_factory=lambda: os.getenv("ALIYUN_SMS_SIGN_NAME", ""))
     aliyun_sms_template_code: str = field(default_factory=lambda: os.getenv("ALIYUN_SMS_TEMPLATE_CODE", ""))
     sms_code_expire_seconds: int = field(default_factory=lambda: int(os.getenv("SMS_CODE_EXPIRE_SECONDS", "300")))
