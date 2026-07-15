@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>??????</title>
+<title>登录 - 猫咪管理系统</title>
 <script src="/js/api.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -31,18 +31,18 @@ body{font-family:-apple-system,"Microsoft YaHei",sans-serif;min-height:100vh;dis
 <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
 <div class="orb o4"></div><div class="orb o5"></div><div class="orb o6"></div>
 <div class="card">
-<h1>??????</h1>
-<div class="field"><label>??</label><input id="phone" type="text" placeholder="??????"></div>
-<div class="field"><label>??</label><input id="password" type="password" placeholder="?????"></div>
-<div class="forgot"><a href="/forgot-password.html">?????</a></div>
-<button class="btn" onclick="doLogin()">? ?</button>
-<div class="link"><a href="/register.html">??????????</a></div>
+<h1>猫咪管理系统</h1>
+<div class="field"><label>账号</label><input id="phone" type="text" placeholder="请输入手机号"></div>
+<div class="field"><label>账号</label><input id="password" type="password" placeholder="请输入密码"></div>
+<div class="forgot"><a href="/forgot-password.html">忘记密码？</a></div>
+<button class="btn" onclick="doLogin()">登 录</button>
+<div class="link"><a href="/register.html">还没有账号？立即注册</a></div>
 </div>
 <script>
 async function doLogin() {
     const phone = document.getElementById("phone").value;
     const password = document.getElementById("password").value;
-    if (!phone || !password) { alert("????????"); return; }
+    if (!phone || !password) { alert("请填写手机号和密码"); return; }
     const res = await api("/auth/login", {
         method: "POST", body: JSON.stringify({ phone, password })
     });
@@ -54,7 +54,7 @@ async function doLogin() {
         if (payload.role_code === "super_admin") window.location.href = "/admin/";
         else window.location.href = "/dashboard.html";
     } else {
-        alert(res.detail || "????");
+        alert(res.detail || "登录失败");
     }
 }
 // Enter key to login

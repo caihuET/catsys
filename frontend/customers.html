@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>???? - ??????</title><script src="/js/api.js"></script>
+<title>客户管理 - 猫咪管理系统</title><script src="/js/api.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,"Microsoft YaHei",sans-serif;background:#f0f2f5;color:#333;font-size:14px}
@@ -28,22 +28,22 @@ select,input{padding:4px 8px;border:1px solid #d9d9d9;border-radius:4px;font-siz
 </style></head><body>
 <div class="layout">
 <div class="sidebar">
-<div class="logo"><span>??</span>????</div>
-<a href="/dashboard.html">???</a>
-<a href="/cats.html">????</a>
-<a href="/customers.html" class="active">????</a>
-<a href="#" onclick="logout()" style="margin-top:40px;border-top:1px solid rgba(255,255,255,0.1);padding-top:12px;">????</a>
+<div class="logo"><span>猫</span>咪管理系统</div>
+<a href="/dashboard.html">仪表盘</a>
+<a href="/cats.html">猫咪管理</a>
+<a href="/customers.html" class="active">客户管理</a>
+<a href="#" onclick="logout()" style="margin-top:40px;border-top:1px solid rgba(255,255,255,0.1);padding-top:12px;">退出登录</a>
 </div>
 <div class="main">
 <div class="header"><span></span><span id="userInfo"></span></div>
 <div class="content">
-<h2>????</h2>
+<h2>客户管理</h2>
 <div class="toolbar">
-<div><input id="search" placeholder="????/??" oninput="loadCustomers()" style="padding:4px 8px;border:1px solid #d9d9d9;border-radius:4px;">
-<select id="filter" onchange="loadCustomers()" style="margin-left:6px"><option value="">????</option><option value="lead">??</option><option value="interested">??</option><option value="contracted">????</option><option value="owner">???</option></select></div>
-<a href="/customer-detail.html" class="btn">+ ????</a>
+<div><input id="search" placeholder="搜索姓名/电话" oninput="loadCustomers()" style="padding:4px 8px;border:1px solid #d9d9d9;border-radius:4px;">
+<select id="filter" onchange="loadCustomers()" style="margin-left:6px"><option value="">全部状态</option><option value="lead">潜在</option><option value="interested">有意向</option><option value="contracted">已签约</option><option value="owner">已购买</option></select></div>
+<a href="/customer-detail.html" class="btn">+ 新增客户</a>
 </div>
-<table><thead><tr><th>??</th><th>??</th><th>??</th><th>??</th><th>??</th><th>??</th><th>??</th></tr></thead><tbody id="customerList"></tbody></table>
+<table><thead><tr><th>姓名</th><th>电话</th><th>微信</th><th>来源</th><th>状态</th><th>备注</th><th>操作</th></tr></thead><tbody id="customerList"></tbody></table>
 <div class="footer" id="footer"></div>
 </div></div></div>
 <script>
@@ -59,9 +59,9 @@ async function loadCustomers() {
     if (f) url += "&status=" + f;
     const r = await api(url);
     const tb = document.getElementById("customerList");
-    if (r.code !== 0 || !r.data.length) { tb.innerHTML = "<tr><td colspan=7 style='text-align:center;color:#999;padding:20px'>????</td></tr>"; return; }
+    if (r.code !== 0 || !r.data.length) { tb.innerHTML = "<tr><td colspan=7 style='text-align:center;color:#999;padding:20px'>暂无数据</td></tr>"; return; }
     tb.innerHTML = r.data.map(c => "<tr><td>" + c.name + "</td><td>" + (c.phone||"-") + "</td><td>" + (c.wechat||"-") + "</td><td>" + (c.source||"-") + "</td><td><span class='badge " + (c.status==="owner"?"green":c.status==="interested"?"blue":c.status==="contracted"?"orange":"gray") + "'>" + c.status + "</span></td><td>" + (c.preferred_breeds||"-") + "</td><td><a href='/customer-detail.html?id=" + c.id + "'>??</a></td></tr>").join("");
-    document.getElementById("footer").textContent = "? " + r.data.length + " ?";
+    document.getElementById("footer").textContent = "共 " + r.data.length + " 条";
 }
 loadCustomers();
 </script></body></html>

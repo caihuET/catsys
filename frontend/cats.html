@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>???? - ??????</title><script src="/js/api.js"></script><style>
+<title>猫咪管理 - 猫咪管理系统</title><script src="/js/api.js"></script><style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,"Microsoft YaHei",sans-serif;background:#f0f2f5;color:#333;font-size:14px}
 .layout{display:flex;min-height:100vh}
@@ -29,25 +29,25 @@ select,input{padding:4px 8px;border:1px solid #d9d9d9;border-radius:4px;font-siz
 </style></head><body>
 <div class="layout">
 <div class="sidebar">
-<div class="logo"><span>??</span>????</div>
-<a href="/dashboard.html">???</a>
-<a href="/cats.html" class="active">????</a>
-<a href="/customers.html">????</a>
-<a href="#" onclick="logout()" style="margin-top:40px;border-top:1px solid rgba(255,255,255,0.1);padding-top:12px;">????</a>
+<div class="logo"><span>猫</span>咪管理系统</div>
+<a href="/dashboard.html">仪表盘</a>
+<a href="/cats.html" class="active">猫咪管理</a>
+<a href="/customers.html">客户管理</a>
+<a href="#" onclick="logout()" style="margin-top:40px;border-top:1px solid rgba(255,255,255,0.1);padding-top:12px;">退出登录</a>
 </div>
 <div class="main">
 <div class="header"><span></span><span id="userInfo"></span></div>
 <div class="content">
-<h2>????</h2>
+<h2>猫咪管理</h2>
 <div class="toolbar">
 <div class="filters">
-<input id="search" placeholder="????" oninput="loadCats()">
-<select id="filterStatus" onchange="loadCats()"><option value="">????</option><option value="available">??</option><option value="reserved">???</option><option value="sold">??</option><option value="fostering">??</option><option value="retired">??</option></select>
-<select id="filterLive" onchange="loadCats()"><option value="">????</option><option value="healthy">??</option><option value="weak">??</option><option value="needs_checkup">???</option><option value="needs_deworming">???</option></select>
+<input id="search" placeholder="搜索猫咪姓名" oninput="loadCats()">
+<select id="filterStatus" onchange="loadCats()"><option value="">全部状态</option><option value="available">在售</option><option value="reserved">已预订</option><option value="sold">已售</option><option value="fostering">寄养</option><option value="retired">退役</option></select>
+<select id="filterLive" onchange="loadCats()"><option value="">全部健康状况</option><option value="healthy">健康</option><option value="weak">体弱</option><option value="needs_checkup">待体检</option><option value="needs_deworming">待驱虫</option></select>
 </div>
-<a href="/cat-detail.html" class="btn">+ ????</a>
+<a href="/cat-detail.html" class="btn">+ 新增猫咪</a>
 </div>
-<table><thead><tr><th>??</th><th>??</th><th>??</th><th>??(?)</th><th>??</th><th>??</th><th>??</th><th>??</th><th>??</th></tr></thead><tbody id="catList"></tbody></table>
+<table><thead><tr><th>名字</th><th>品种</th><th>怫别</th><th>日龄(天)</th><th>到店</th><th>健康</th><th>绝育</th><th>状态</th><th>操作</th></tr></thead><tbody id="catList"></tbody></table>
 <div class="footer" id="footer"></div>
 </div></div></div>
 <script>
@@ -65,9 +65,9 @@ async function loadCats() {
     if (lv) url += "&live_status=" + lv;
     const r = await api(url);
     const tb = document.getElementById("catList");
-    if (r.code !== 0 || !r.data.length) { tb.innerHTML = "<tr><td colspan=9 style='text-align:center;color:#999;padding:20px'>????</td></tr>"; return; }
-    tb.innerHTML = r.data.map(c => "<tr><td>" + c.name + "</td><td>" + (c.breed||"-") + "</td><td>" + (c.gender||"-") + "</td><td>" + (c.age_days||"-") + "</td><td>" + (c.arrival_days?c.arrival_days+"?":"-") + "</td><td><span class='badge " + (c.live_status==="healthy"?"green":"orange") + "'>" + (c.live_status||"-") + "</span></td><td><span class='badge " + (c.neutered_status==="neutered"?"green":"gray") + "'>" + (c.neutered_status||"-") + "</span></td><td><span class='badge " + (c.status==="available"?"green":c.status==="reserved"?"blue":c.status==="sold"?"gray":c.status==="fostering"?"orange":"") + "'>" + (c.status||"-") + "</span></td><td><a href='/cat-detail.html?id=" + c.id + "'>??</a></td></tr>").join("");
-    document.getElementById("footer").textContent = "? " + r.data.length + " ?";
+    if (r.code !== 0 || !r.data.length) { tb.innerHTML = "<tr><td colspan=9 style='text-align:center;color:#999;padding:20px'>暂无数据</td></tr>"; return; }
+    tb.innerHTML = r.data.map(c => "<tr><td>" + c.name + "</td><td>" + (c.breed||"-") + "</td><td>" + (c.gender||"-") + "</td><td>" + (c.age_days||"-") + "</td><td>" + (c.arrival_days?c.arrival_days+"?":"-") + "</td><td><span class='badge " + (c.live_status==="healthy"?"green":"orange") + "'>" + (c.live_status||"-") + "</span></td><td><span class='badge " + (c.neutered_status==="neutered"?"green":"gray") + "'>" + (c.neutered_status||"-") + "</span></td><td><span class='badge " + (c.status==="available"?"green":c.status==="reserved"?"blue":c.status==="sold"?"gray":c.status==="fostering"?"orange":"") + "'>" + (c.status||"-") + "</span></td><td><a href='/cat-detail.html?id=" + c.id + "'>查看</a></td></tr>").join("");
+    document.getElementById("footer").textContent = "共 " + r.data.length + " 条";
 }
 loadCats();
 </script></body></html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>??? - ??????</title><script src="/js/api.js"></script>
+<title>仪表盘 - 猫咪管理系统</title><script src="/js/api.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,"Microsoft YaHei",sans-serif;background:#f0f2f5;color:#333;font-size:14px}
@@ -38,23 +38,23 @@ select,input{padding:4px 8px;border:1px solid #d9d9d9;border-radius:4px;font-siz
 </style></head><body>
 <div class="layout">
 <div class="sidebar">
-<div class="logo"><span>??</span>????</div>
-<a href="/dashboard.html" class="active">???</a>
-<a href="/cats.html">????</a>
-<a href="/customers.html">????</a>
-<a href="/admin/" style="margin-top:20px;border-top:1px solid rgba(255,255,255,0.1);padding-top:12px;">????</a>
-<a href="#" onclick="logout()">????</a>
+<div class="logo"><span>猫</span>咪管理系统</div>
+<a href="/dashboard.html" class="active">仪表盘</a>
+<a href="/cats.html">猫咪管理</a>
+<a href="/customers.html">客户管理</a>
+<a href="/admin/" style="margin-top:20px;border-top:1px solid rgba(255,255,255,0.1);padding-top:12px;">系统管理</a>
+<a href="#" onclick="logout()">退出登录</a>
 </div>
 <div class="main">
 <div class="header"><span></span><span id="userInfo"></span></div>
 <div class="content">
-<h2>???</h2>
+<h2>仪表盘</h2>
 <div class="stats" id="stats"></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-<div class="card"><h3>????</h3><div class="item" id="activities">???...</div></div>
-<div class="card"><h3>????</h3>
-<a href="/cats.html" class="btn">????</a>
-<a href="/customers.html" class="btn" style="background:#52c41a">????</a>
+<div class="card"><h3>最近动态</h3><div class="item" id="activities">加载中...</div></div>
+<div class="card"><h3>快捷操作</h3>
+<a href="/cats.html" class="btn">猫咪管理</a>
+<a href="/customers.html" class="btn" style="background:#52c41a">客户管理</a>
 </div></div>
 </div></div></div>
 <script>
@@ -67,10 +67,10 @@ async function loadStats() {
     if (r.code === 0) {
         const d = r.data;
         document.getElementById("stats").innerHTML = [
-            '<a href="/cats.html" class="stat"><div class="num"><span class="underline">' + d.total_cats + '</span></div><div class="label">????</div></a>',
-            '<a href="/customers.html" class="stat"><div class="num"><span class="underline">' + d.total_customers + '</span></div><div class="label">????</div></a>',
-            '<div class="stat"><div class="num">' + d.active_reservations + '</div><div class="label">?????</div></div>',
-            '<div class="stat"><div class="num">' + d.pending_tasks + '</div><div class="label">????</div></div>',
+            '<a href="/cats.html" class="stat"><div class="num"><span class="underline">' + d.total_cats + '</span></div><div class="label">猫咪总数</div></a>',
+            '<a href="/customers.html" class="stat"><div class="num"><span class="underline">' + d.total_customers + '</span></div><div class="label">猫咪总数</div></a>',
+            '<div class="stat"><div class="num">' + d.active_reservations + '</div><div class="label">待办预约</div></div>',
+            '<div class="stat"><div class="num">' + d.pending_tasks + '</div><div class="label">客户总数</div></div>',
         ].join("");
     }
 }
