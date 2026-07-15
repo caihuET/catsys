@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>?? - ??????</title><script src="/js/api.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,"Microsoft YaHei",sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#f0f4ff,#e8eeff,#fce4ec,#fff3e0,#f3e5f5);}
+.orb{position:absolute;border-radius:50%;filter:blur(60px);opacity:0.25;pointer-events:none;}
+.o1{width:400px;height:400px;top:-100px;left:-80px;background:linear-gradient(135deg,#a8c0ff,#3f2b96);}
+.o2{width:300px;height:300px;bottom:60px;right:-50px;background:linear-gradient(135deg,#f093fb,#f5576c);}
+.o3{width:200px;height:200px;bottom:30%;left:15%;background:linear-gradient(135deg,#fa709a,#fee140);}
+.card{background:#fff;border-radius:8px;width:420px;padding:32px;position:relative;z-index:1;box-shadow:0 8px 32px rgba(0,0,0,0.08);}
+.card h1{text-align:center;font-size:20px;color:#333;margin-bottom:24px;}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:13px;color:#666;margin-bottom:4px;}
+.field input{width:100%;padding:9px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;outline:none;}
+.field input:focus{border-color:#1890ff;}
+.btn{width:100%;padding:10px;background:#1890ff;color:#fff;border:none;border-radius:6px;font-size:15px;cursor:pointer;}
+.link{text-align:center;margin-top:12px;font-size:13px;}.link a{color:#1890ff;text-decoration:none;}
+.hint{font-size:12px;color:#fa8c16;text-align:center;margin:8px 0;}
+</style></head>
+<body>
+<div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+<div class="card">
+<h1>??????</h1>
+<div class="field"><label>???</label><input id="phone" placeholder="??????"></div>
+<div class="field"><label>???</label><div style="display:flex;gap:8px;"><input id="code" placeholder="?????" style="flex:1;padding:9px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;outline:none;"><button id="codeBtn" onclick="getCode()" style="white-space:nowrap;padding:9px 12px;border:1px solid #d9d9d9;border-radius:6px;background:#fff;cursor:pointer;">?????</button></div></div>
+<div class="field"><label>????</label><input id="name" placeholder="??????"></div>
+<div class="field"><label>???</label><input id="contact" placeholder="?????"></div>
+<div class="field"><label>??</label><input id="password" type="password" placeholder="??????"></div>
+<div class="field"><label>????</label><input id="confirm" type="password" placeholder="??????"></div>
+<div class="hint">?????IP 24???????10???</div>
+<div style="font-size:12px;color:#999;text-align:center;margin:8px 0;">?????????????</div>
+<button class="btn" onclick="doRegister()">?????</button>
+<div class="link"><a href="/">????????</a></div>
+</div>
+<script>
+function getCode() {
+    const btn = document.getElementById("codeBtn");
+    btn.disabled = true;
+    let sec = 59;
+    btn.textContent = sec + "s";
+    const t = setInterval(() => { sec--; btn.textContent = sec + "s"; if(sec<=0){clearInterval(t);btn.disabled=false;btn.textContent="?????";} }, 1000);
+}
+async function doRegister() {
+    const phone = document.getElementById("phone").value;
+    const name = document.getElementById("name").value;
+    const contact = document.getElementById("contact").value;
+    const pass = document.getElementById("password").value;
+    const confirm = document.getElementById("confirm").value;
+    if (!phone || !name || !contact || !pass) { alert("???????"); return; }
+    if (pass !== confirm) { alert("???????"); return; }
+    const res = await api("/auth/register", {
+        method: "POST",
+        body: JSON.stringify({ phone, password: pass, business_name: name, contact_person: contact })
+    });
+    if (res.code === 0) {
+        alert("????????");
+        window.location.href = "/";
+    } else {
+        alert(res.detail || "????");
+    }
+}
+</script></body></html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>??????</title>
+<script src="/js/api.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,"Microsoft YaHei",sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#f0f4ff,#e8eeff,#fce4ec,#fff3e0,#f3e5f5);position:relative;overflow:hidden;}
+.orb{position:absolute;border-radius:50%;filter:blur(60px);opacity:0.25;pointer-events:none;}
+.o1{width:400px;height:400px;top:-100px;left:-80px;background:linear-gradient(135deg,#a8c0ff,#3f2b96);}
+.o2{width:300px;height:300px;bottom:60px;right:-50px;background:linear-gradient(135deg,#f093fb,#f5576c);}
+.o3{width:250px;height:250px;top:40%;left:55%;background:linear-gradient(135deg,#4facfe,#00f2fe);}
+.o4{width:180px;height:180px;bottom:30%;left:15%;background:linear-gradient(135deg,#fa709a,#fee140);}
+.o5{width:350px;height:350px;top:10%;right:20%;background:linear-gradient(135deg,#a18cd1,#fbc2eb);opacity:0.15;}
+.o6{width:200px;height:200px;bottom:10%;left:40%;background:linear-gradient(135deg,#ffecd2,#fcb69f);}
+.card{background:#fff;border-radius:8px;width:380px;padding:36px;position:relative;z-index:1;box-shadow:0 8px 32px rgba(0,0,0,0.08);}
+.card h1{text-align:center;font-size:24px;color:#333;margin-bottom:28px;}
+.field{margin-bottom:16px;}
+.field label{display:block;font-size:13px;color:#666;margin-bottom:4px;}
+.field input{width:100%;padding:10px 12px;border:1px solid #d9d9d9;border-radius:6px;font-size:14px;outline:none;}
+.field input:focus{border-color:#1890ff;box-shadow:0 0 0 2px rgba(24,144,255,0.1);}
+.btn{width:100%;padding:10px;background:#1890ff;color:#fff;border:none;border-radius:6px;font-size:15px;cursor:pointer;}
+.btn:hover{background:#40a9ff;}
+.link{text-align:center;margin-top:12px;font-size:13px;}
+.link a{color:#1890ff;text-decoration:none;}
+.forgot{text-align:right;margin-top:4px;}
+.forgot a{font-size:12px;color:#999;text-decoration:none;}
+</style></head>
+<body>
+<div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+<div class="orb o4"></div><div class="orb o5"></div><div class="orb o6"></div>
+<div class="card">
+<h1>??????</h1>
+<div class="field"><label>??</label><input id="phone" type="text" placeholder="??????"></div>
+<div class="field"><label>??</label><input id="password" type="password" placeholder="?????"></div>
+<div class="forgot"><a href="/forgot-password.html">?????</a></div>
+<button class="btn" onclick="doLogin()">? ?</button>
+<div class="link"><a href="/register.html">??????????</a></div>
+</div>
+<script>
+async function doLogin() {
+    const phone = document.getElementById("phone").value;
+    const password = document.getElementById("password").value;
+    if (!phone || !password) { alert("????????"); return; }
+    const res = await api("/auth/login", {
+        method: "POST", body: JSON.stringify({ phone, password })
+    });
+    if (res.code === 0) {
+        setToken(res.data.token);
+        setUser({ id: res.data.user_id, phone, merchant_id: res.data.merchant_id });
+        // Redirect based on user type
+        const payload = JSON.parse(atob(res.data.token.split(".")[1]));
+        if (payload.role_code === "super_admin") window.location.href = "/admin/";
+        else window.location.href = "/dashboard.html";
+    } else {
+        alert(res.detail || "????");
+    }
+}
+// Enter key to login
+document.addEventListener("keydown", e => { if(e.key === "Enter") doLogin(); });
+</script>
+</body></html>

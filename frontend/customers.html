@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>???? - ??????</title><script src="/js/api.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"Microsoft YaHei",sans-serif;background:#f0f2f5;color:#333;font-size:14px}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:200px;background:#001529;color:#fff}
+.sidebar .logo{padding:16px;font-size:16px;font-weight:bold;border-bottom:1px solid rgba(255,255,255,0.1)}
+.sidebar .logo span{color:#1890ff}
+.sidebar a{display:block;padding:10px 16px;color:rgba(255,255,255,0.65);text-decoration:none;font-size:13px}
+.sidebar a:hover,.sidebar a.active{background:rgba(255,255,255,0.08);color:#fff}
+.main{flex:1}
+.header{height:50px;background:#fff;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
+.content{padding:20px}
+h2{font-size:18px;margin-bottom:16px}
+.toolbar{display:flex;justify-content:space-between;margin-bottom:12px}
+.btn{display:inline-block;padding:6px 14px;background:#1890ff;color:#fff;border:none;border-radius:4px;font-size:13px;cursor:pointer;text-decoration:none}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #e8e8e8;font-size:13px}
+th{background:#fafafa;padding:8px 10px;text-align:left;color:#666;border-bottom:2px solid #e8e8e8}
+td{padding:8px 10px;border-bottom:1px solid #f0f0f0}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:12px}
+.badge.green{background:#f6ffed;color:#52c41a;border:1px solid #b7eb8f}
+.badge.blue{background:#e6f7ff;color:#1890ff;border:1px solid #91d5ff}
+.badge.orange{background:#fff7e6;color:#fa8c16;border:1px solid #ffd591}
+.badge.gray{background:#fafafa;color:#999;border:1px solid #d9d9d9}
+.footer{font-size:12px;color:#999;margin-top:8px}
+select,input{padding:4px 8px;border:1px solid #d9d9d9;border-radius:4px;font-size:13px}
+</style></head><body>
+<div class="layout">
+<div class="sidebar">
+<div class="logo"><span>??</span>????</div>
+<a href="/dashboard.html">???</a>
+<a href="/cats.html">????</a>
+<a href="/customers.html" class="active">????</a>
+<a href="#" onclick="logout()" style="margin-top:40px;border-top:1px solid rgba(255,255,255,0.1);padding-top:12px;">????</a>
+</div>
+<div class="main">
+<div class="header"><span></span><span id="userInfo"></span></div>
+<div class="content">
+<h2>????</h2>
+<div class="toolbar">
+<div><input id="search" placeholder="????/??" oninput="loadCustomers()" style="padding:4px 8px;border:1px solid #d9d9d9;border-radius:4px;">
+<select id="filter" onchange="loadCustomers()" style="margin-left:6px"><option value="">????</option><option value="lead">??</option><option value="interested">??</option><option value="contracted">????</option><option value="owner">???</option></select></div>
+<a href="/customer-detail.html" class="btn">+ ????</a>
+</div>
+<table><thead><tr><th>??</th><th>??</th><th>??</th><th>??</th><th>??</th><th>??</th><th>??</th></tr></thead><tbody id="customerList"></tbody></table>
+<div class="footer" id="footer"></div>
+</div></div></div>
+<script>
+const user = getUser();
+if (!user) window.location.href = "/";
+document.getElementById("userInfo").textContent = user.phone;
+
+async function loadCustomers() {
+    const s = document.getElementById("search").value;
+    const f = document.getElementById("filter").value;
+    let url = "/customers?merchant_id=" + (user.merchant_id || 0);
+    if (s) url += "&search=" + s;
+    if (f) url += "&status=" + f;
+    const r = await api(url);
+    const tb = document.getElementById("customerList");
+    if (r.code !== 0 || !r.data.length) { tb.innerHTML = "<tr><td colspan=7 style='text-align:center;color:#999;padding:20px'>????</td></tr>"; return; }
+    tb.innerHTML = r.data.map(c => "<tr><td>" + c.name + "</td><td>" + (c.phone||"-") + "</td><td>" + (c.wechat||"-") + "</td><td>" + (c.source||"-") + "</td><td><span class='badge " + (c.status==="owner"?"green":c.status==="interested"?"blue":c.status==="contracted"?"orange":"gray") + "'>" + c.status + "</span></td><td>" + (c.preferred_breeds||"-") + "</td><td><a href='/customer-detail.html?id=" + c.id + "'>??</a></td></tr>").join("");
+    document.getElementById("footer").textContent = "? " + r.data.length + " ?";
+}
+loadCustomers();
+</script></body></html>

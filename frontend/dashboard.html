@@ -1,0 +1,78 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>??? - ??????</title><script src="/js/api.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"Microsoft YaHei",sans-serif;background:#f0f2f5;color:#333;font-size:14px}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:200px;background:#001529;color:#fff;padding:0}
+.sidebar .logo{padding:16px;font-size:16px;font-weight:bold;border-bottom:1px solid rgba(255,255,255,0.1)}
+.sidebar .logo span{color:#1890ff}
+.sidebar a{display:block;padding:10px 16px;color:rgba(255,255,255,0.65);text-decoration:none;font-size:13px}
+.sidebar a:hover,.sidebar a.active{background:rgba(255,255,255,0.08);color:#fff}
+.main{flex:1}
+.header{height:50px;background:#fff;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
+.content{padding:20px}
+h2{font-size:18px;margin-bottom:16px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat{background:#fff;padding:16px;border-radius:6px;text-align:center;cursor:pointer;border:1px solid #e8e8e8}
+.stat a{text-decoration:none;color:inherit;display:block}
+.stat .num{font-size:28px;font-weight:700;color:#1890ff}
+.stat .num .underline{border-bottom:1px dashed rgba(24,144,255,0.25)}
+.stat .label{font-size:13px;color:#999;margin-top:4px}
+.card{background:#fff;border:1px solid #e8e8e8;border-radius:6px;padding:16px;margin-bottom:12px}
+.card h3{font-size:14px;color:#666;margin-bottom:10px}
+.card .item{font-size:13px;color:#666;line-height:2}
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.btn{display:inline-block;padding:6px 14px;background:#1890ff;color:#fff;border:none;border-radius:4px;font-size:13px;cursor:pointer;text-decoration:none}
+.btn:hover{opacity:0.85}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #e8e8e8}
+th{background:#fafafa;padding:8px 10px;text-align:left;font-size:13px;color:#666;border-bottom:2px solid #e8e8e8}
+td{padding:8px 10px;border-bottom:1px solid #f0f0f0;font-size:13px}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:12px}
+.badge.green{background:#f6ffed;color:#52c41a;border:1px solid #b7eb8f}
+.badge.blue{background:#e6f7ff;color:#1890ff;border:1px solid #91d5ff}
+.badge.orange{background:#fff7e6;color:#fa8c16;border:1px solid #ffd591}
+.badge.red{background:#fff2f0;color:#ff4d4f;border:1px solid #ffccc7}
+.badge.gray{background:#fafafa;color:#999;border:1px solid #d9d9d9}
+select,input{padding:4px 8px;border:1px solid #d9d9d9;border-radius:4px;font-size:13px}
+</style></head><body>
+<div class="layout">
+<div class="sidebar">
+<div class="logo"><span>??</span>????</div>
+<a href="/dashboard.html" class="active">???</a>
+<a href="/cats.html">????</a>
+<a href="/customers.html">????</a>
+<a href="/admin/" style="margin-top:20px;border-top:1px solid rgba(255,255,255,0.1);padding-top:12px;">????</a>
+<a href="#" onclick="logout()">????</a>
+</div>
+<div class="main">
+<div class="header"><span></span><span id="userInfo"></span></div>
+<div class="content">
+<h2>???</h2>
+<div class="stats" id="stats"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<div class="card"><h3>????</h3><div class="item" id="activities">???...</div></div>
+<div class="card"><h3>????</h3>
+<a href="/cats.html" class="btn">????</a>
+<a href="/customers.html" class="btn" style="background:#52c41a">????</a>
+</div></div>
+</div></div></div>
+<script>
+const user = getUser();
+if (!user) { window.location.href = "/"; }
+document.getElementById("userInfo").textContent = user.phone + " | " + new Date().toLocaleDateString();
+
+async function loadStats() {
+    const r = await api("/dashboard?merchant_id=" + (user.merchant_id || 0));
+    if (r.code === 0) {
+        const d = r.data;
+        document.getElementById("stats").innerHTML = [
+            '<a href="/cats.html" class="stat"><div class="num"><span class="underline">' + d.total_cats + '</span></div><div class="label">????</div></a>',
+            '<a href="/customers.html" class="stat"><div class="num"><span class="underline">' + d.total_customers + '</span></div><div class="label">????</div></a>',
+            '<div class="stat"><div class="num">' + d.active_reservations + '</div><div class="label">?????</div></div>',
+            '<div class="stat"><div class="num">' + d.pending_tasks + '</div><div class="label">????</div></div>',
+        ].join("");
+    }
+}
+loadStats();
+</script></body></html>
