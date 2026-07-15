@@ -104,38 +104,6 @@ def index():
     return jsonify({"app": settings.app_name, "version": "v0.1"})
 
 @app.route(URL_PREFIX + "/<path:subpath>", methods=["GET", "POST", "PUT", "DELETE"])
-def proxy(subpath):
-    import requests
-    target_path = "/" + subpath
-    target_service = None
-    for prefix, url in SERVICE_MAP.items():
-        if target_path.startswith(prefix):
-            target_service = url + target_path
-            break
-    if not target_service:
-        return jsonify({"code": 404, "message": "route not found"}), 404
-    if target_path == "/health":
-        return jsonify({"status": "ok", "service": "api-gateway"})
-    if target_path == "/health":
-        return jsonify({"status": "ok", "service": "api-gateway"})
-    if not target_service:
-        return jsonify({"code": 404, "message": "route not found"}), 404
-    
-    headers = {k: v for k, v in request.headers if k.lower() not in ("host", "content-length")}
-    headers["X-Forwarded-Prefix"] = URL_PREFIX
-    
-    try:
-        resp = requests.request(
-            method=request.method,
-            url=target_service,
-            headers=headers,
-            params=request.args,
-            json=request.get_json(silent=True),
-            timeout=10,
-        )
-        return jsonify(resp.json()), resp.status_code
-    except requests.ConnectionError:
-        return jsonify({"code": 503, "message": "service unavailable"}), 503
 
 if __name__ == "__main__":
     logger.info(f"API Gateway starting on port {settings.api_gateway_port}")
