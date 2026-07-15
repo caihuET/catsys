@@ -7,3 +7,8 @@ app = FastAPI(title="cat-service", version="0.1")
 @app.get("/health")
 async def health():
     return {"status": "ok", "service": "cat-service"}
+
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from api.routes import router
+app.include_router(router, prefix="/api")
