@@ -75,7 +75,7 @@ def login(req: LoginRequest):
 def send_code(req: SendCodeRequest, request: Request = None):
     """发送短信验证码"""
     from src.shared.config import settings
-    from ..service.sms import send_sms
+    from service.sms import send_sms
     # 校验手机号格式
     if not req.phone or len(req.phone) < 11:
         raise HTTPException(status_code=400, detail="手机号格式不正确")
@@ -106,7 +106,7 @@ def reset_password(req: ResetPasswordRequest):
 
 @router.post("/auth/register")
 def register(req: RegisterRequest, request: Request = None):
-    from ..service.sms import verify_code, check_reg_rate_limit, increment_reg_count
+    from service.sms import verify_code, check_reg_rate_limit, increment_reg_count
     # 1. 校验短信验证码
     if not verify_code(req.phone, req.code):
         raise HTTPException(status_code=400, detail="验证码错误或已过期")
