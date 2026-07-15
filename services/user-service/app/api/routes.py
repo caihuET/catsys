@@ -92,7 +92,7 @@ def send_code(req: SendCodeRequest, request: Request = None):
 @router.post("/auth/reset-password")
 def reset_password(req: ResetPasswordRequest):
     """重置密码"""
-    from ..service.sms import verify_code
+    from service.sms import verify_code
     if not verify_code(req.phone, req.code):
         raise HTTPException(status_code=400, detail="验证码错误或已过期")
     import bcrypt
