@@ -16,3 +16,8 @@ async def startup():
 @app.get("/health")
 async def health():
     return {"status": "ok", "service": "user-service"}
+
+# 添加 app 目录到 sys.path，使 api.routes 可被导入
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from api.routes import router
+app.include_router(router, prefix="/api")
