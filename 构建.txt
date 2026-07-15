@@ -24,7 +24,7 @@ curl -X POST http://10.0.0.120:30002/cat/api/auth/login \
   
   
   
-  cd /opt/catsys
+cd /opt/catsys
 git pull
 
 # 重建所有微服务（build-all 会自动处理全部7个）
