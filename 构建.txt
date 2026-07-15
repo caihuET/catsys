@@ -1,0 +1,38 @@
+第一步：检查 K3s 是否正常运行
+kubectl get nodes
+kubectl get pods -A
+第二步：部署到 K3s
+cd /opt/catsys
+./deploy/scripts/deploy-all.sh
+第三步：等 Pod 全部 Running 后验证
+kubectl get all -n cat-sys
+curl http://10.0.0.120:30002/cat/health
+
+
+
+cd /opt/catsys
+git pull
+docker build --no-cache -t cat-sys/user-service:v0.1 -f services/user-service/Dockerfile .
+docker save cat-sys/user-service:v0.1 | /usr/local/bin/k3s ctr images import -
+kubectl rollout restart deployment user-service -n cat-sys
+sleep 10
+
+# 测试
+curl -X POST http://10.0.0.120:30002/cat/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"phone":"13800000001","password":"admin123"}'
+  
+  
+  
+  cd /opt/catsys
+git pull
+
+# 重建所有微服务（build-all 会自动处理全部7个）
+./deploy/scripts/build-all.sh
+
+# 部署
+kubectl rollout restart deployment -n cat-sys
+
+# 等 Pod 就绪
+sleep 20
+kubectl get pods -n cat-sys
