@@ -45,6 +45,8 @@ def proxy(subpath):
         if target_path.startswith(prefix):
             target_service = url + target_path
             break
+    if target_path == "/health":
+        return jsonify({"status": "ok", "service": "api-gateway"})
     if not target_service:
         return jsonify({"code": 404, "message": "route not found"}), 404
     
@@ -112,6 +114,8 @@ def proxy(subpath):
             break
     if not target_service:
         return jsonify({"code": 404, "message": "route not found"}), 404
+    if target_path == "/health":
+        return jsonify({"status": "ok", "service": "api-gateway"})
     if target_path == "/health":
         return jsonify({"status": "ok", "service": "api-gateway"})
     if not target_service:
