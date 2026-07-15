@@ -112,6 +112,10 @@ def proxy(subpath):
             break
     if not target_service:
         return jsonify({"code": 404, "message": "route not found"}), 404
+    if target_path == "/health":
+        return jsonify({"status": "ok", "service": "api-gateway"})
+    if not target_service:
+        return jsonify({"code": 404, "message": "route not found"}), 404
     
     headers = {k: v for k, v in request.headers if k.lower() not in ("host", "content-length")}
     headers["X-Forwarded-Prefix"] = URL_PREFIX

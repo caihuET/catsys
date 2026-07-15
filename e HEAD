@@ -1,0 +1,47 @@
+[33mcommit e516443da55a257437bd522d2615358ecca8c482[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: lwq <linweiqian@139.com>
+Date:   Wed Jul 15 11:48:02 2026 +0800
+
+    feat: Version 1 frontend + all backend APIs
+
+[33mcommit fe4b00285f673b1987ee3ee47023c13836a777f5[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: lwq <linweiqian@139.com>
+Date:   Wed Jul 15 11:05:53 2026 +0800
+
+    feat: all Version 1 backend APIs + seed script
+
+[33mcommit f2fd51abc5caf5f3bcac7eb63c5721f1e0cc4969[m
+Author: lwq <linweiqian@139.com>
+Date:   Wed Jul 15 10:27:36 2026 +0800
+
+    feat: Version 1 backend APIs - merchant/cat/crm/finance/dashboard
+
+[33mcommit 2b4cda27676746320f7b19321ba72e2a7b38a2bb[m
+Author: lwq <linweiqian@139.com>
+Date:   Wed Jul 15 10:14:33 2026 +0800
+
+    fix: login merchant_id for merchant_owner
+
+[33mcommit b0383895bbb3db0cb83ade0415e418f6a1311040[m
+Author: lwq <linweiqian@139.com>
+Date:   Wed Jul 15 10:03:54 2026 +0800
+
+    add route
+
+[33mcommit 1963b0805fb2c3686411948c6cc275c1d1e71565[m
+Author: lwq <linweiqian@139.com>
+Date:   Wed Jul 15 08:50:06 2026 +0800
+
+    fix: /cat/health
+
+[33mcommit e33419ad41efe2f44cebbf55979635563ac2a066[m
+Author: lwq <linweiqian@139.com>
+Date:   Tue Jul 14 22:32:23 2026 +0800
+
+    add build-all.sh
+
+[33mcommit ccd5335021aa751e8ad66cbca647e8f68240e7fa[m
+Author: lwq <linweiqian@139.com>
+Date:   Tue Jul 14 17:00:50 2026 +0800
+
+    Initial commit (remove sensitive files)
