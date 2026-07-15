@@ -44,6 +44,9 @@ def verify_code(phone: str, code: str) -> bool:
 
 
 def send_sms(phone: str) -> dict:
+    import random
+    code = "".join(str(random.randint(0, 9)) for _ in range(6))
+    store_code(phone, code)
     """通过阿里云 Dypnsapi 发送短信验证码
     验证码由阿里云服务端生成并返回，我们将其存入 Redis 用于后续校验"""
     try:
@@ -65,7 +68,8 @@ def send_sms(phone: str) -> dict:
             sign_name=settings.aliyun_sms_sign_name,
             template_code=settings.aliyun_sms_template_code,
             phone_number=phone,
-            template_param=json.dumps({"code": "##code##", "min": "5"}),
+            template_param=json.dumps({"code": code, "min": "5"}),
+            code_type=2,
         )
         runtime = util_models.RuntimeOptions()
         resp = client.send_sms_verify_code_with_options(req, runtime)
@@ -73,8 +77,6 @@ def send_sms(phone: str) -> dict:
 
         if body.code == "OK":
             # 从返回值提取阿里云生成的验证码，存入 Redis
-            sms_code = body.model.verify_code
-            store_code(phone, sms_code)
             logger.info("短信发送成功: phone=%s, biz_id=%s", phone, body.model.biz_id)
             return {"success": True, "biz_id": body.model.biz_id}
         else:
