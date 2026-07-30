@@ -4,22 +4,44 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>客户详情 - 猫咖管理系统</title>
-<link rel="stylesheet" href="/css/style.css">
 <script src="/js/api.js"></script>
-<script src="/js/sidebar.js"></script>
 <style>
-.form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;background:#fff;padding:20px;border-radius:6px;border:1px solid #e8e8e8}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"Microsoft YaHei",sans-serif;background:#f0f2f5;color:#333;font-size:14px;min-height:100vh}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:200px;background:#001529;color:#fff;flex-shrink:0}
+.sidebar .logo{padding:16px;font-size:16px;font-weight:bold;border-bottom:1px solid rgba(255,255,255,0.1)}
+.sidebar .logo span{color:#1890ff}
+.sidebar a{display:block;padding:10px 16px;color:rgba(255,255,255,0.65);text-decoration:none;font-size:13px}
+.sidebar a:hover,.sidebar a.active{background:rgba(255,255,255,0.08);color:#fff}
+.main{flex:1;min-width:0}
+.header{height:50px;background:#fff;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
+.content{padding:20px}
+h2{font-size:18px;margin-bottom:16px;color:#333}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:700px;background:#fff;padding:20px;border-radius:6px;border:1px solid #e8e8e8}
 .field{display:flex;flex-direction:column;gap:4px}
 .field label{font-size:13px;color:#666;font-weight:500}
 .field input,.field select,.field textarea{padding:7px 10px;border:1px solid #d9d9d9;border-radius:4px;font-size:13px;outline:none}
 .field input:focus,.field select:focus{border-color:#1890ff}
 .field textarea{min-height:60px;resize:vertical}
-.actions{text-align:right;margin-top:16px;grid-column:1/-1}
+.actions{text-align:right;margin-top:16px;max-width:700px}
+.btn{padding:7px 20px;background:#1890ff;color:#fff;border:none;border-radius:4px;font-size:14px;cursor:pointer}
+.btn:hover{opacity:0.85}
+.btn-cancel{background:#fff;color:#666;border:1px solid #d9d9d9;margin-right:8px}
 </style>
 </head>
 <body>
 <div class="layout">
 <div class="sidebar" id="sidebar"></div>
+<div class="main">
+<div class="header"><span></span><span id="userInfo"></span></div>
+<div class="content">
+<h2 id="pageTitle">新增客户</h2>
+<div class="form-grid">
+<div class="field"><label>姓名</label><input id="name" placeholder="客户姓名"></div>
+<div class="field"><label>手机号</label><input id="phone" placeholder="手机号"></div>
+<div class="field"><label>微信</label><input id="wechat" placeholder="微信号"></div>
+<div class="field"><label>邮箱</label><input id="email" type="email" placeholder="邮箱"></div>
 <div class="field"><label>来源</label><input id="source" placeholder="如：小红书"></div>
 <div class="field"><label>状态</label><select id="status"><option value="lead">潜在</option><option value="interested">有意向</option><option value="contracted">已签约</option><option value="owner">已购买</option><option value="lost">已流失</option></select></div>
 <div class="field"><label>偏好品种</label><input id="preferredBreeds" placeholder="如：布偶猫, 英短"></div>
@@ -61,13 +83,10 @@ async function loadCustomer(id) {
     document.getElementById("notes").value = d.notes || "";
 }
 async function saveCustomer() {
-        const br = await api("/branches?merchant_id=" + user.merchant_id);
+    const br = await api("/branches?merchant_id=" + user.merchant_id);
     const branchId = (br.code === 0 && br.data && br.data.length > 0) ? br.data[0].id : 0;
     const body = {
         merchant_id: user.merchant_id || 0,
-        branch_id: branchId,
-        if (!document.getElementById("name").value.trim()) { alert("请输入客户姓名"); return; }
-        if (!document.getElementById("name").value.trim()) { alert("请输入客户姓名"); return; }
         name: document.getElementById("name").value,
         phone: document.getElementById("phone").value || null,
         wechat: document.getElementById("wechat").value || null,

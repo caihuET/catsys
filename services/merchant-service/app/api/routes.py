@@ -89,15 +89,30 @@ def create_branch(req: BranchCreate):
     return {"code": 0, "data": {"id": b.id}}
 
 
+@router.put("/branches/{branch_id}")
+def update_branch(branch_id: int, req: BranchCreate):
+    db = get_db_sync()
+    b = db.query(Branch).filter(Branch.id == branch_id).first()
+    if not b:
+        raise HTTPException(404, detail="branch not found")
+    b.name = req.name
+    if req.address is not None:
+        b.address = req.address
+    if req.contact_phone is not None:
+        b.contact_phone = req.contact_phone
+    db.commit()
+    return {"code": 0, "message": "updated"}
+
+
 @router.delete("/branches/{branch_id}")
 def delete_branch(branch_id: int):
     db = get_db_sync()
     b = db.query(Branch).filter(Branch.id == branch_id).first()
     if not b:
         raise HTTPException(404, detail="branch not found")
-    b.status = "closed"
+    db.delete(b)
     db.commit()
-    return {"code": 0, "message": "branch closed"}
+    return {"code": 0, "message": "deleted"}
 
 
 @router.get("/modules")

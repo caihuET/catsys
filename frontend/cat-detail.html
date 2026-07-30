@@ -1,25 +1,47 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>猫咪详情 - 猫咖管理系统</title>
-<link rel="stylesheet" href="/css/style.css">
 <script src="/js/api.js"></script>
-<script src="/js/sidebar.js"></script>
 <style>
-.form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;background:#fff;padding:20px;border-radius:6px;border:1px solid #e8e8e8}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'Microsoft YaHei',sans-serif;background:#f0f2f5;color:#333;font-size:14px}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:200px;background:#001529;color:#fff}
+.sidebar .logo{padding:16px;font-size:16px;font-weight:bold;border-bottom:1px solid rgba(255,255,255,0.1)}
+.sidebar .logo span{color:#1890ff}
+.sidebar a{display:block;padding:10px 16px;color:rgba(255,255,255,0.65);text-decoration:none;font-size:13px}
+.sidebar a:hover,.sidebar a.active{background:rgba(255,255,255,0.08);color:#fff}
+.main{flex:1}
+.header{height:50px;background:#fff;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
+.content{padding:20px}
+h2{font-size:18px;margin-bottom:16px;color:#333}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:700px;background:#fff;padding:20px;border-radius:6px;border:1px solid #e8e8e8}
 .field{display:flex;flex-direction:column;gap:4px}
 .field label{font-size:13px;color:#666;font-weight:500}
 .field input,.field select,.field textarea{padding:7px 10px;border:1px solid #d9d9d9;border-radius:4px;font-size:13px;outline:none}
 .field input:focus,.field select:focus{border-color:#1890ff}
 .field textarea{min-height:60px;resize:vertical}
-.actions{text-align:right;margin-top:16px;grid-column:1/-1}
+.actions{text-align:right;margin-top:16px;max-width:700px}
+.btn{padding:7px 20px;background:#1890ff;color:#fff;border:none;border-radius:4px;font-size:14px;cursor:pointer}
+.btn:hover{opacity:0.85}
+.btn-cancel{background:#fff;color:#666;border:1px solid #d9d9d9;margin-right:8px}
 </style>
 </head>
 <body>
 <div class="layout">
 <div class="sidebar" id="sidebar"></div>
+<div class="main">
+<div class="header"><span></span><span id="userInfo"></span></div>
+<div class="content">
+<h2 id="pageTitle">新增猫咪</h2>
+<div class="form-grid" id="catForm">
+<div class="field"><label>名称</label><input id="name" placeholder="猫咪名称"></div>
+<div class="field"><label>品种</label><input id="breed" placeholder="如：布偶猫"></div>
+<div class="field"><label>毛色</label><input id="color" placeholder="如：蓝双"></div>
+<div class="field"><label>性别</label><select id="gender"><option value="">请选择</option><option value="male">公</option><option value="female">母</option></select></div>
 <div class="field"><label>生日</label><input id="birthDate" type="date"></div>
 <div class="field"><label>到店日期</label><input id="arrivalDate" type="date"></div>
 <div class="field"><label>芯片号</label><input id="microchip" placeholder="芯片编号"></div>
@@ -62,13 +84,10 @@ async function loadCat(id) {
 
 async function saveCat() {
     try {
-            const br = await api("/branches?merchant_id=" + user.merchant_id);
-        const branchId = (br.code === 0 && br.data && br.data.length > 0) ? br.data[0].id : 0;
+        const br = await api("/branches?merchant_id=" + user.merchant_id);
+    const branchId = (br.code === 0 && br.data && br.data.length > 0) ? br.data[0].id : 0;
     const body = {
         merchant_id: user.merchant_id || 0,
-        branch_id: branchId,
-        if (!document.getElementById("name").value.trim()) { alert("请输入猫咪名称"); return; }
-        if (!document.getElementById("name").value.trim()) { alert("请输入猫咪名称"); return; }
         name: document.getElementById("name").value,
         breed: document.getElementById("breed").value || null,
         color: document.getElementById("color").value || null,
