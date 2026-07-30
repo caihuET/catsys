@@ -92,27 +92,42 @@ def create_branch(req: BranchCreate):
 @router.put("/branches/{branch_id}")
 def update_branch(branch_id: int, req: BranchCreate):
     db = get_db_sync()
-    b = db.query(Branch).filter(Branch.id == branch_id).first()
-    if not b:
-        raise HTTPException(404, detail="branch not found")
-    b.name = req.name
-    if req.address is not None:
+    try:
+        b = db.query(Branch).filter(Branch.id == branch_id).first()
+        if not b:
+            raise HTTPException(404, detail="branch not found")
+        b.name = req.name
         b.address = req.address
-    if req.contact_phone is not None:
         b.contact_phone = req.contact_phone
-    db.commit()
-    return {"code": 0, "message": "updated"}
+        db.commit()
+        return {"code": 0, "message": "updated"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"更新分店失败: {str(e)}")
 
 
 @router.delete("/branches/{branch_id}")
 def delete_branch(branch_id: int):
     db = get_db_sync()
-    b = db.query(Branch).filter(Branch.id == branch_id).first()
-    if not b:
-        raise HTTPException(404, detail="branch not found")
-    db.delete(b)
-    db.commit()
-    return {"code": 0, "message": "deleted"}
+    try:
+        b = db.query(Branch).filter(Branch.id == branch_id).first()
+        if not b:
+            raise HTTPException(404, detail="branch not found")
+        from src.shared.models import Cat, Customer
+        cat_count = db.query(Cat).filter(Cat.branch_id == branch_id).count()
+        cust_count = db.query(Customer).filter(Customer.branch_id == branch_id).count()
+        if cat_count > 0 or cust_count > 0:
+            raise HTTPException(status_code=400, detail=f"该分店下有 {cat_count} 只猫咪和 {cust_count} 位客户，请先转移再删除")
+        db.delete(b)
+        db.commit()
+        return {"code": 0, "message": "deleted"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"删除分店失败: {str(e)}")
 
 
 @router.get("/modules")
