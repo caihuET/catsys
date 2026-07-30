@@ -9,13 +9,23 @@ router = APIRouter()
 @router.get("/dashboard")
 def get_dashboard(merchant_id: int, branch_id: int = None):
     db = get_db_sync()
-    def bf(q): return q.filter(Cat.branch_id == branch_id) if branch_id else q
-    cats = bf(db.query(func.count(Cat.id)).filter(Cat.merchant_id == merchant_id)).scalar() or 0
-    customers = bf(db.query(func.count(Customer.id)).filter(Customer.merchant_id == merchant_id)).scalar() or 0
-    active_res = bf(db.query(func.count(Reservation.id)).filter(
-        Reservation.merchant_id == merchant_id, Reservation.status.in_(["active", "deposit_paid"]))).scalar() or 0
-    pending_tasks = bf(db.query(func.count(FollowupTask.id)).filter(
-        FollowupTask.merchant_id == merchant_id, FollowupTask.status == "pending")).scalar() or 0
+    
+    q_cat = db.query(func.count(Cat.id))
+    if merchant_id: q_cat = q_cat.filter(Cat.merchant_id == merchant_id)
+    cats = q_cat.scalar() or 0
+    
+    q_cust = db.query(func.count(Customer.id))
+    if merchant_id: q_cust = q_cust.filter(Customer.merchant_id == merchant_id)
+    customers = q_cust.scalar() or 0
+    
+    q_res = db.query(func.count(Reservation.id)).filter(Reservation.status.in_(["active", "deposit_paid"]))
+    if merchant_id: q_res = q_res.filter(Reservation.merchant_id == merchant_id)
+    active_res = q_res.scalar() or 0
+    
+    q_task = db.query(func.count(FollowupTask.id)).filter(FollowupTask.status == "pending")
+    if merchant_id: q_task = q_task.filter(FollowupTask.merchant_id == merchant_id)
+    pending_tasks = q_task.scalar() or 0
+    
     return {"code": 0, "data": {
         "total_cats": cats, "total_customers": customers,
         "active_reservations": active_res, "pending_tasks": pending_tasks,
