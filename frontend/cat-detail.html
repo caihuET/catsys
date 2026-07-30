@@ -87,7 +87,8 @@ async function loadCat(id) {
 }
 
 async function saveCat() {
-    const body = {
+    try {
+        const body = {
         merchant_id: user.merchant_id || 0, branch_id: 0,
         name: document.getElementById("name").value,
         breed: document.getElementById("breed").value || null,
@@ -100,15 +101,19 @@ async function saveCat() {
         status: document.getElementById("status").value,
         price: parseFloat(document.getElementById("price").value) || null,
         notes: document.getElementById("notes").value || null,
-    };
-    const url = catId ? ("/cats/" + catId) : "/cats";
-    const method = catId ? "PUT" : "POST";
-    const r = await api(url, { method, body: JSON.stringify(body) });
-    if (r.code === 0) {
+        };
+        const url = catId ? ("/cats/" + catId) : "/cats";
+        const method = catId ? "PUT" : "POST";
+        const r = await api(url, { method, body: JSON.stringify(body) });
+        if (r.code === 0) {
         alert(catId ? "\u4fdd\u5b58\u6210\u529f" : "\u65b0\u589e\u6210\u529f");
         window.location.href = "/cats.html";
-    } else {
+        } else {
         alert(r.detail || "\u64cd\u4f5c\u5931\u8d25");
+        }
+    } catch(e) {
+        console.error("saveCat error:", e);
+        alert("网络请求失败：" + e.message);
     }
 }
 </script>
