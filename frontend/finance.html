@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>财务 - 猫咖管理系统</title>
+<link rel="stylesheet" href="/css/style.css">
+<script src="/js/api.js"></script>
+<script src="/js/sidebar.js"></script>
+</head>
+<body>
+<div class="layout">
+<div class="sidebar" id="sidebar"></div>
+<div class="main">
+<div class="header"><div class="left"><span style="font-weight:600;color:#1890ff;">猫咖管理系统</span></div><div class="right"><span id="userInfo"></span></div></div>
+<div class="content">
+<div class="page-title">财务管理</div>
+<div class="wf-card"><div class="wf-card-title">支收流水</div>
+<table class="wf-table"><thead><tr><th>日期</th><th>类型</th><th>分类</th><th>金额</th><th>描述</th></tr></thead>
+<tbody id="txnList"></tbody></table>
+<div class="mt-12 text-muted" id="txnFooter">加载中...</div>
+</div></div></div></div>
+<script>
+const user = initPage();
+const PAGES = [["\ud83d\udcca 仪表盘","/dashboard.html"],["\ud83d\udc31 猫咪管理","/cats.html"],["\ud83d\udc64 客户管理","/customers.html"],["\ud83d\udcb0 销售管理","/sales.html"],["\ud83d\udd21 健康管理","/health.html"],["\ud83d\udcc8 财务","/finance.html"],["\ud83c\udfea 分店管理","/branches.html"],["\ud83d\udc65 员工管理","/employees.html"],["\u2699 系统管理","/admin/"]];
+buildSidebar(PAGES, 5);
+async function loadTxns() {
+    var r = await api("/transactions?merchant_id=" + (user.merchant_id||0));
+    var tb = document.getElementById("txnList");
+    if (r.code!==0||!r.data||!r.data.length) { tb.innerHTML = "<tr><td colspan=5 class='text-center text-muted' style='padding:20px'>暂无数据</td></tr>"; return; }
+    tb.innerHTML = r.data.map(function(t){
+        return "<tr><td>"+t.transaction_date+"</td><td><span class='wf-badge "+(t.type==="income"?"green":"red")+"'>"+(t.type==="income"?"收入":"支出")+"</span></td><td>"+t.category+"</td><td>¥"+(t.amount||0)+"</td><td>"+s(t.description)+"</td></tr>";
+    }).join("");
+}
+loadTxns();
+</script></body></html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>销售管理 - 猫咖管理系统</title>
+<link rel="stylesheet" href="/css/style.css">
+<script src="/js/api.js"></script>
+<script src="/js/sidebar.js"></script>
+</head>
+<body>
+<div class="layout">
+<div class="sidebar" id="sidebar"></div>
+<div class="main">
+<div class="header"><div class="left"><span style="font-weight:600;color:#1890ff;">猫咖管理系统</span></div><div class="right"><span id="userInfo"></span></div></div>
+<div class="content">
+<div class="page-title">销售管理 &gt; 预订管理</div>
+<div class="wf-toolbar">
+<div class="filters">
+<select id="filterStatus" class="wf-select" onchange="loadReservations()"><option value="">全部状态</option><option value="active">进行中</option><option value="deposit_paid">已付定金</option><option value="contracted">已签合同</option><option value="completed">已完成</option><option value="cancelled">已取消</option></select>
+</div>
+<div><span class="wf-btn primary small" onclick="showAddModal()">+ 创建预订</span></div>
+</div>
+<table class="wf-table"><thead><tr><th>ID</th><th>客户</th><th>猫咪</th><th>定金</th><th>总价</th><th>状态</th><th>操作</th></tr></thead>
+<tbody id="reservList"></tbody></table>
+<div class="mt-12 text-muted" id="reservFooter">加载中...</div>
+</div></div></div>
+<div class="wf-modal-overlay" id="addModal">
+<div class="wf-modal">
+<div class="wf-modal-header">创建预订</div>
+<div class="wf-modal-body">
+<div class="wf-form-row"><label>客户</label><select id="selCustomer" class="wf-select" style="flex:1;"></select></div>
+<div class="wf-form-row"><label>猫咪</label><select id="selCat" class="wf-select" style="flex:1;"></select></div>
+<div class="wf-form-row"><label>预订日期</label><input id="reservDate" type="date" class="wf-input" style="flex:1;"></div>
+<div class="wf-form-row"><label>定金金额</label><input id="depositAmount" type="number" class="wf-input" style="flex:1;width:150px;" placeholder="0"><span style="margin-left:4px;color:#999;">元</span></div>
+<div class="wf-form-row"><label>备注</label><textarea id="reservNotes" class="wf-input" style="flex:1;min-height:60px;" placeholder="备注信息"></textarea></div>
+</div>
+<div class="wf-modal-footer"><span class="wf-btn" onclick="hideAddModal()">取消</span><span class="wf-btn primary" onclick="saveReservation()">提交</span></div>
+</div></div>
+<script>
+const user = initPage();
+const PAGES = [["\ud83d\udcca 仪表盘","/dashboard.html"],["\ud83d\udc31 猫咪管理","/cats.html"],["\ud83d\udc64 客户管理","/customers.html"],["\ud83d\udcb0 销售管理","/sales.html"],["\ud83d\udd21 健康管理","/health.html"],["\ud83d\udcc8 财务","/finance.html"],["\ud83c\udfea 分店管理","/branches.html"],["\ud83d\udc65 员工管理","/employees.html"],["\u2699 系统管理","/admin/"]];
+buildSidebar(PAGES, 3);
+function showAddModal() { document.getElementById("addModal").classList.add("show"); loadCustomers(); loadCats(); }
+function hideAddModal() { document.getElementById("addModal").classList.remove("show"); }
+async function loadCustomers() {
+    var r = await api("/customers?merchant_id=" + (user.merchant_id||0));
+    if (r.code!==0||!r.data) return;
+    var sel = document.getElementById("selCustomer");
+    sel.innerHTML = '<option value="">请选择客户</option>' + r.data.map(function(c){return '<option value="'+c.id+'">'+c.name+' ('+s(c.phone)+')</option>';}).join("");
+}
+async function loadCats() {
+    var r = await api("/cats?merchant_id=" + (user.merchant_id||0));
+    if (r.code!==0||!r.data) return;
+    var sel = document.getElementById("selCat");
+    sel.innerHTML = '<option value="">请选择猫咪</option>' + r.data.filter(function(c){return c.status==="available"||c.status==="reserved";}).map(function(c){return '<option value="'+c.id+'">'+c.name+' ('+s(c.breed)+')</option>';}).join("");
+}
+var clsMap = {active:"orange",deposit_paid:"blue",contracted:"orange",completed:"green",cancelled:"gray"};
+async function loadReservations() {
+    var st = document.getElementById("filterStatus").value;
+    var url = "/reservations?merchant_id=" + (user.merchant_id||0);
+    if (st) url += "&status=" + st;
+    var r = await api(url);
+    var tb = document.getElementById("reservList");
+    if (r.code!==0||!r.data||!r.data.length) { tb.innerHTML = "<tr><td colspan=7 class='text-center text-muted' style='padding:20px'>暂无数据</td></tr>"; return; }
+    tb.innerHTML = r.data.map(function(r){
+        return "<tr><td>"+r.id+"</td><td>"+r.customer_id+"</td><td>"+s(r.cat_id)+"</td><td>¥"+(r.deposit_amount||0)+"</td><td>"+(r.total_price?"¥"+r.total_price:"-")+"</td><td>"+badge(r.status,clsMap)+"</td><td><span class='wf-btn small'>编辑</span></td></tr>";
+    }).join("");
+    document.getElementById("reservFooter").textContent = "共 " + r.data.length + " 条";
+}
+async function saveReservation() {
+    var body = {
+        merchant_id: user.merchant_id||0, branch_id: 0,
+        customer_id: parseInt(document.getElementById("selCustomer").value) || 0,
+        cat_id: parseInt(document.getElementById("selCat").value) || null,
+        reservation_date: document.getElementById("reservDate").value || new Date().toISOString().slice(0,10),
+        deposit_amount: parseFloat(document.getElementById("depositAmount").value) || 0,
+        notes: document.getElementById("reservNotes").value || null,
+    };
+    if (!body.customer_id) { alert("请选择客户"); return; }
+    var r = await api("/reservations", {method:"POST", body:JSON.stringify(body)});
+    if (r.code===0) { alert("创建成功"); hideAddModal(); loadReservations(); }
+    else { alert(r.detail||"创建失败"); }
+}
+loadReservations();
+</script></body></html>

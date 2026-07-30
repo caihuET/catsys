@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>任务管理 - 猫咖管理系统</title>
+<link rel="stylesheet" href="/css/style.css">
+<script src="/js/api.js"></script>
+<script src="/js/sidebar.js"></script>
+</head>
+<body>
+<div class="layout">
+<div class="sidebar" id="sidebar"></div>
+<div class="main">
+<div class="header"><div class="left"><span style="font-weight:600;color:#1890ff;">猫咖管理系统</span></div><div class="right"><span id="userInfo"></span></div></div>
+<div class="content">
+<div class="page-title">任务管理</div>
+<div class="wf-toolbar"><div class="filters">
+<select id="filterStatus" class="wf-select" onchange="loadTasks()"><option value="">全部状态</option><option value="pending">待办理</option><option value="completed">已完成</option><option value="cancelled">已取消</option></select>
+</div></div>
+<table class="wf-table"><thead><tr><th>标题</th><th>类型</th><th>截止日期</th><th>状态</th><th>操作</th></tr></thead>
+<tbody id="taskList"></tbody></table>
+<div class="mt-12 text-muted" id="taskFooter">加载中...</div>
+</div></div></div>
+<script>
+const user = initPage();
+const PAGES = [["\ud83d\udcca 仪表盘","/dashboard.html"],["\ud83d\udc31 猫咪管理","/cats.html"],["\ud83d\udc64 客户管理","/customers.html"],["\ud83d\udcb0 销售管理","/sales.html"],["\ud83d\udd21 健康管理","/health.html"],["\ud83d\udcc8 财务","/finance.html"],["\ud83c\udfea 分店管理","/branches.html"],["\ud83d\udc65 员工管理","/employees.html"],["\u2699 系统管理","/admin/"]];
+buildSidebar(PAGES, 0);
+async function loadTasks() {
+    var st = document.getElementById("filterStatus").value;
+    var url = "/tasks?merchant_id=" + (user.merchant_id||0);
+    if (st) url += "&status=" + st;
+    var r = await api(url);
+    var tb = document.getElementById("taskList");
+    if (r.code!==0||!r.data||!r.data.length) { tb.innerHTML = "<tr><td colspan=5 class='text-center text-muted' style='padding:20px'>暂无任务</td></tr>"; return; }
+    tb.innerHTML = r.data.map(function(t){
+        return "<tr><td>"+s(t.title)+"</td><td>"+s(t.task_type)+"</td><td>"+s(t.due_date)+"</td><td>"+badge(t.status,{pending:"orange",completed:"green",cancelled:"gray"})+"</td><td>"+(t.status==="pending"?"<span class='wf-btn small' onclick='completeTask("+t.id+")'>完成</span>":"-")+"</td></tr>";
+    }).join("");
+}
+async function completeTask(id) {
+    var r = await api("/tasks/" + id + "/complete", {method:"PUT"});
+    if (r.code===0) { loadTasks(); } else { alert(r.detail||"失败"); }
+}
+loadTasks();
+</script></body></html>

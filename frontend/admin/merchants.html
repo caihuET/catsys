@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>商家管理 - 猫咖管理系统</title>
+<link rel="stylesheet" href="/css/style.css">
+<script src="/js/api.js"></script>
+<script src="/js/sidebar.js"></script>
+</head>
+<body>
+<div class="layout">
+<div class="sidebar" id="sidebar"></div>
+<div class="main">
+<div class="header"><div class="left"><span style="font-weight:600;color:#1890ff;">猫咖管理系统后台</span></div><div class="right"><span id="userInfo"></span></div></div>
+<div class="content">
+<div class="page-title">商家管理</div>
+<div class="wf-toolbar"><div class="filters"><input id="search" class="wf-input" style="width:240px;" placeholder="搜索猫舍名/联系人" oninput="loadMerchants()"></div></div>
+<table class="wf-table"><thead><tr><th>ID</th><th>猫舍名称</th><th>联系人</th><th>联系电话</th><th>状态</th><th>操作</th></tr></thead>
+<tbody id="merchantList"></tbody></table></div></div></div>
+<script>
+const user = initPage();
+document.getElementById("sidebar").innerHTML =
+    "<div class="logo"><span>猫</span>咖管理系统</div>" +
+    "<a href="/dashboard.html" class="nav-item">\ud83d\udcca 仪表盘</a>" +
+    "<a href="/admin/" class="nav-item">\u2699 系统管理</a>" +
+    "<a href="/admin/merchants.html" class="nav-item active">\ud83c\udfe2 商家管理</a>" +
+    "<a href="#" onclick="doLogout()" class="nav-item" style="margin-top:20px;border-top:1px solid rgba(255,255,255,0.1);padding-top:12px;">退出登录</a>";
+async function loadMerchants() {
+    var r = await api("/merchants");
+    var tb = document.getElementById("merchantList");
+    if (r.code!==0||!r.data||!r.data.length) { tb.innerHTML = "<tr><td colspan=6 class='text-center text-muted' style='padding:20px'>暂无商家</td></tr>"; return; }
+    tb.innerHTML = r.data.map(function(m){
+        return "<tr><td>"+m.id+"</td><td>"+s(m.business_name)+"</td><td>"+s(m.contact_person)+"</td><td>"+s(m.contact_phone)+"</td><td>"+badge(m.status,{active:"green",suspended:"orange",expired:"red",deleted:"gray"})+"</td><td><a href='/admin/merchant-detail.html?id="+m.id+"' class='wf-btn small'>详情</a></td></tr>";
+    }).join("");
+}
+loadMerchants();
+</script></body></html>
