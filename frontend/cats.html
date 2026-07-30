@@ -39,10 +39,12 @@ async function loadCats() {
     const r = await api(url);
     const tb = document.getElementById("catList");
     if (r.code !== 0 || !r.data || !r.data.length) { tb.innerHTML = "<tr><td colspan=8 class='text-center text-muted' style='padding:20px;'>暂无数据</td></tr>"; document.getElementById("catFooter").textContent = "共 0 条"; return; }
+    var genderMap = {male:"公",female:"母"};
+    var statusMap = {available:"在售",reserved:"已预订",sold:"已售",fostering:"寄养",retired:"退役"};
     tb.innerHTML = r.data.map(function(c) {
         var a = c.age_days ? Math.floor(c.age_days/365) + "Y" : "-";
         var cls = {available:"green",reserved:"blue",sold:"gray",fostering:"orange",retired:"gray"}[c.status] || "gray";
-        return "<tr><td>" + s(c.name) + "</td><td>" + s(c.breed) + "</td><td>" + s(c.color) + "</td><td>" + s(c.gender) + "</td><td>" + a + "</td><td><span class='wf-badge " + cls + "'>" + c.status + "</span></td><td>" + (c.price ? "¥" + c.price : "-") + "</td><td><a href='/cat-detail.html?id=" + c.id + "' class='wf-btn small'>编辑</a></td></tr>";
+        return "<tr><td>" + s(c.name) + "</td><td>" + s(c.breed) + "</td><td>" + s(c.color) + "</td><td>" + (genderMap[c.gender] || s(c.gender)) + "</td><td>" + a + "</td><td><span class='wf-badge " + cls + "'>" + (statusMap[c.status] || c.status) + "</span></td><td>" + (c.price ? "¥" + c.price : "-") + "</td><td><a href='/cat-detail.html?id=" + c.id + "' class='wf-btn small'>编辑</a></td></tr>";
     }).join("");
     document.getElementById("catFooter").textContent = "共 " + r.data.length + " 条";
 }

@@ -26,6 +26,7 @@
 <div class="wf-form-row"><label>分店名称</label><input id="bName" class="wf-input" style="flex:1;" placeholder="请输入分店名称"></div>
 <div class="wf-form-row"><label>地址</label><input id="bAddr" class="wf-input" style="flex:1;" placeholder="地址"></div>
 <div class="wf-form-row"><label>联系电话</label><input id="bPhone" class="wf-input" style="flex:1;" placeholder="电话"></div>
+<div class="wf-form-row"><label>状态</label><select id="bStatus" class="wf-select" style="flex:1;"><option value="active">营业中</option><option value="closed">已关闭</option></select></div>
 </div>
 <div class="wf-modal-footer"><span class="wf-btn" onclick="hideAddModal()">取消</span><span class="wf-btn primary" onclick="saveBranch()">保存</span></div>
 </div></div>
@@ -52,7 +53,8 @@ async function saveBranch() {
         merchant_id: user.merchant_id||0,
         name: document.getElementById("bName").value,
         address: document.getElementById("bAddr").value||null,
-        contact_phone: document.getElementById("bPhone").value||null
+        contact_phone: document.getElementById("bPhone").value||null,
+        status: document.getElementById("bStatus").value
     };
     if (!body.name) { alert("请输入分店名称"); return; }
     var r;
@@ -83,6 +85,7 @@ function editBranchById(id) {
     document.getElementById("bName").value = b.name;
     document.getElementById("bAddr").value = b.address || "";
     document.getElementById("bPhone").value = b.contact_phone || "";
+    document.getElementById("bStatus").value = b.status || "active";
     document.querySelector(".wf-modal-header").textContent = "编辑分店";
     showAddModal();
 }

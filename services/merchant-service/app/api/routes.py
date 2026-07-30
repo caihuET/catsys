@@ -24,6 +24,7 @@ class BranchCreate(BaseModel):
     name: str
     address: Optional[str] = None
     contact_phone: Optional[str] = None
+    status: str = "active"
 
 
 class ModuleConfigUpdate(BaseModel):
@@ -99,6 +100,7 @@ def update_branch(branch_id: int, req: BranchCreate):
         b.name = req.name
         b.address = req.address
         b.contact_phone = req.contact_phone
+        b.status = req.status
         db.commit()
         return {"code": 0, "message": "updated"}
     except HTTPException:
