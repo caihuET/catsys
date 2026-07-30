@@ -52,8 +52,8 @@ async function loadStats() {
         document.getElementById("stats").innerHTML =
             '<a href="/cats.html" class="wf-stat"><div class="num">' + (d.total_cats||0) + '</div><div class="label">猫咪总数</div></a>' +
             '<a href="/customers.html" class="wf-stat"><div class="num">' + (d.total_customers||0) + '</div><div class="label">客户总数</div></a>' +
-            '<a href="/sales.html" class="wf-stat"><div class="num" style="color:#fa8c16;">' + (d.active_reservations||0) + '</div><div class="label">预订进行中</div></a>' +
-            '<a href="/tasks.html" class="wf-stat"><div class="num" style="color:#52c41a;">' + (d.pending_tasks||0) + '</div><div class="label">待办任务</div></a>';
+            '<a href="/sales.html" class="wf-stat"><div class="num" style="color:#fa8c16;">' + (d.active_reservations||0) + '</div><div class="label">预定进行中</div></a>' +
+            '<a href="/tasks.html" class="wf-stat"><div class="num" style="color:#52c41a;">' + (d.pending_tasks||0) + '</div><div class="label">代办任务</div></a>';
     }
     document.getElementById("pendingItems").innerHTML = '• <a href="/cats.html">查看猫咪列表</a><br>• <a href="/sales.html">查看销售记录</a>';
 }

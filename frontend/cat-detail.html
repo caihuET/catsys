@@ -4,30 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>猫咪详情 - 猫咖管理系统</title>
+<link rel="stylesheet" href="/css/style.css">
 <script src="/js/api.js"></script>
+<script src="/js/sidebar.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,'Microsoft YaHei',sans-serif;background:#f0f2f5;color:#333;font-size:14px}
-.layout{display:flex;min-height:100vh}
-.sidebar{width:200px;background:#001529;color:#fff}
-.sidebar .logo{padding:16px;font-size:16px;font-weight:bold;border-bottom:1px solid rgba(255,255,255,0.1)}
-.sidebar .logo span{color:#1890ff}
-.sidebar a{display:block;padding:10px 16px;color:rgba(255,255,255,0.65);text-decoration:none;font-size:13px}
-.sidebar a:hover,.sidebar a.active{background:rgba(255,255,255,0.08);color:#fff}
-.main{flex:1}
-.header{height:50px;background:#fff;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
-.content{padding:20px}
-h2{font-size:18px;margin-bottom:16px;color:#333}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:700px;background:#fff;padding:20px;border-radius:6px;border:1px solid #e8e8e8}
+.form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;background:#fff;padding:20px;border-radius:6px;border:1px solid #e8e8e8}
 .field{display:flex;flex-direction:column;gap:4px}
 .field label{font-size:13px;color:#666;font-weight:500}
 .field input,.field select,.field textarea{padding:7px 10px;border:1px solid #d9d9d9;border-radius:4px;font-size:13px;outline:none}
 .field input:focus,.field select:focus{border-color:#1890ff}
 .field textarea{min-height:60px;resize:vertical}
-.actions{text-align:right;margin-top:16px;max-width:700px}
-.btn{padding:7px 20px;background:#1890ff;color:#fff;border:none;border-radius:4px;font-size:14px;cursor:pointer}
-.btn:hover{opacity:0.85}
-.btn-cancel{background:#fff;color:#666;border:1px solid #d9d9d9;margin-right:8px}
+.actions{text-align:right;margin-top:16px;grid-column:1/-1}
 </style>
 </head>
 <body>
@@ -62,8 +49,10 @@ h2{font-size:18px;margin-bottom:16px;color:#333}
 </div>
 </div></div></div>
 <script>
-const user = getUser();
+const user = initPage();
 if (!user) { window.location.href = "/"; }
+const PAGES = [["???", "/dashboard.html"],["????", "/cats.html"],["????", "/customers.html"],["????", "/sales.html"],["????", "/health.html"],["??", "/finance.html"],["????", "/branches.html"],["????", "/employees.html"],["????", "/admin/"]];
+buildSidebar(PAGES, 1);
 document.getElementById("userInfo").textContent = user.phone;
 const params = new URLSearchParams(location.search);
 const catId = params.get("id");
@@ -90,6 +79,7 @@ async function saveCat() {
     try {
         const body = {
         merchant_id: user.merchant_id || 0,
+        branch_id: 0,
         name: document.getElementById("name").value,
         breed: document.getElementById("breed").value || null,
         color: document.getElementById("color").value || null,
