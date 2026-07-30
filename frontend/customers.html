@@ -33,14 +33,15 @@ async function loadCustomers() {
     const q = document.getElementById("search").value;
     const f = document.getElementById("filter").value;
     let url = "/customers?merchant_id=" + (user.merchant_id || 0);
-    if (q) url += "&search=" + s;
+    if (q) url += "&search=" + encodeURIComponent(q);
     if (f) url += "&status=" + f;
     const r = await api(url);
     const tb = document.getElementById("customerList");
     if (r.code !== 0 || !r.data || !r.data.length) { tb.innerHTML = "<tr><td colspan=7 class='text-center text-muted' style='padding:20px'>暂无数据</td></tr>"; document.getElementById("custFooter").textContent = "共 0 条"; return; }
     var clsMap = {owner:"green",interested:"blue",contracted:"orange",lead:"gray",lost:"red"};
+        var statusName = {lead:"潜在",interested:"有意向",contracted:"已签约",owner:"已购买",lost:"已流失"};
     tb.innerHTML = r.data.map(function(c) {
-        return "<tr><td>" + s(c.name) + "</td><td>" + s(c.phone) + "</td><td>" + s(c.wechat) + "</td><td>" + s(c.source) + "</td><td>" + badge(c.status, clsMap) + "</td><td>" + s(c.preferred_breeds) + "</td><td><a href='/customer-detail.html?id=" + c.id + "' class='wf-btn small'>编辑</a></td></tr>";
+        return "<tr><td>" + s(c.name) + "</td><td>" + s(c.phone) + "</td><td>" + s(c.wechat) + "</td><td>" + s(c.source) + "</td><td>" + (statusName[c.status] || c.status) + "</td><td>" + s(c.preferred_breeds) + "</td><td><a href='/customer-detail.html?id=" + c.id + "' class='wf-btn small'>编辑</a></td></tr>";
     }).join("");
     document.getElementById("custFooter").textContent = "共 " + r.data.length + " 条";
 }

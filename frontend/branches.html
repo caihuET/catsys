@@ -45,7 +45,7 @@ async function loadBranches() {
     if (r.code!==0||!r.data||!r.data.length) { tb.innerHTML = "<tr><td colspan=6 class='text-center text-muted' style='padding:20px'>暂无分店</td></tr>"; return; }
     branchData = r.data;
     tb.innerHTML = r.data.map(function(b){
-        return "<tr><td>"+b.id+"</td><td>"+s(b.name)+"</td><td>"+s(b.address)+"</td><td>"+s(b.contact_phone)+"</td><td>"+badge(b.status,{active:"green",closed:"gray"})+"</td><td><span class='wf-btn small' onclick='editBranchById("+b.id+")'>编辑</span> <span class='wf-btn small danger' onclick='if(confirm(\"确定删除\"))delBranch("+b.id+")'>删除</span></td></tr>";
+        return "<tr><td>"+b.id+"</td><td>"+s(b.name)+"</td><td>"+s(b.address)+"</td><td>"+s(b.contact_phone)+"</td><td>"+(b.status==="active"?"营业中":"已关闭")+"</td><td><span class='wf-btn small' onclick='editBranchById("+b.id+")'>编辑</span> <span class='wf-btn small danger' onclick='if(confirm(\"确定删除\"))delBranch("+b.id+")'>删除</span></td></tr>";
     }).join("");
 }
 async function saveBranch() {

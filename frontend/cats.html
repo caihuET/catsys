@@ -34,7 +34,7 @@ async function loadCats() {
     const q = document.getElementById("search").value;
     const st = document.getElementById("filterStatus").value;
     let url = "/cats?merchant_id=" + (user.merchant_id || 0);
-    if (q) url += "&search=" + s;
+    if (q) url += "&search=" + encodeURIComponent(q);
     if (st) url += "&status=" + st;
     const r = await api(url);
     const tb = document.getElementById("catList");

@@ -60,7 +60,7 @@ def list_cats(branch_id: Optional[int] = None, merchant_id: Optional[int] = None
     if breed: q = q.filter(Cat.breed == breed)
     if status: q = q.filter(Cat.status == status)
     if live_status: q = q.filter(Cat.live_status == live_status)
-    if search: q = q.filter(Cat.name.like(f"%{search}%"))
+    if search: q = q.filter(Cat.name.like(f"%{search}%") | Cat.microchip_number.like(f"%{search}%"))
     cats = q.order_by(Cat.id).all()
     result = []
     for c in cats:
