@@ -1,0 +1,112 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>???? - ??????</title><script src="/js/api.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"Microsoft YaHei",sans-serif;background:#f0f2f5;color:#333;font-size:14px}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:200px;background:#001529;color:#fff}
+.sidebar .logo{padding:16px;font-size:16px;font-weight:bold;border-bottom:1px solid rgba(255,255,255,0.1)}
+.sidebar .logo span{color:#1890ff}
+.sidebar a{display:block;padding:10px 16px;color:rgba(255,255,255,0.65);text-decoration:none;font-size:13px}
+.sidebar a:hover,.sidebar a.active{background:rgba(255,255,255,0.08);color:#fff}
+.main{flex:1}
+.header{height:50px;background:#fff;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
+.content{padding:20px}
+h2{font-size:18px;margin-bottom:16px;color:#333}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:700px;background:#fff;padding:20px;border-radius:6px;border:1px solid #e8e8e8}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:13px;color:#666;font-weight:500}
+.field input,.field select,.field textarea{padding:7px 10px;border:1px solid #d9d9d9;border-radius:4px;font-size:13px;outline:none}
+.field input:focus,.field select:focus{border-color:#1890ff}
+.field textarea{min-height:60px;resize:vertical}
+.actions{text-align:right;margin-top:16px;max-width:700px}
+.btn{padding:7px 20px;background:#1890ff;color:#fff;border:none;border-radius:4px;font-size:14px;cursor:pointer}
+.btn:hover{opacity:0.85}
+.btn-cancel{background:#fff;color:#666;border:1px solid #d9d9d9;margin-right:8px}
+</style></head><body>
+<div class="layout">
+<div class="sidebar">
+<div class="logo"><span>?</span>?????</div>
+<a href="/dashboard.html">???</a>
+<a href="/cats.html">????</a>
+<a href="/customers.html" class="active">????</a>
+<a href="#" onclick="logout()" style="margin-top:40px;border-top:1px solid rgba(255,255,255,0.1);padding-top:12px;">????</a>
+</div>
+<div class="main">
+<div class="header"><span></span><span id="userInfo"></span></div>
+<div class="content">
+<h2 id="pageTitle">????</h2>
+<div class="form-grid">
+<div class="field"><label>??</label><input id="name" placeholder="????"></div>
+<div class="field"><label>???</label><input id="phone" placeholder="???"></div>
+<div class="field"><label>??</label><input id="wechat" placeholder="???"></div>
+<div class="field"><label>??</label><input id="email" type="email" placeholder="??"></div>
+<div class="field"><label>??</label><input id="source" placeholder="?????"></div>
+<div class="field"><label>??</label><select id="status"><option value="lead">??</option><option value="interested">???</option><option value="contracted">???</option><option value="owner">???</option><option value="lost">???</option></select></div>
+<div class="field"><label>????</label><input id="preferredBreeds" placeholder="?????, ??"></div>
+<div class="field"><label>????</label><input id="preferredColors" placeholder="????, ???"></div>
+<div class="field"><label>????(?)</label><input id="budgetMin" type="number" placeholder="0"></div>
+<div class="field"><label>????(?)</label><input id="budgetMax" type="number" placeholder="0"></div>
+<div class="field" style="grid-column:1/-1"><label>??</label><input id="address" placeholder="??"></div>
+<div class="field" style="grid-column:1/-1"><label>??</label><textarea id="notes" placeholder="????"></textarea></div>
+</div>
+<div class="actions">
+<button class="btn btn-cancel" onclick="history.back()">??</button>
+<button class="btn" onclick="saveCustomer()">??</button>
+</div>
+</div></div></div>
+<script>
+const user = getUser();
+if (!user) { window.location.href = "/"; }
+document.getElementById("userInfo").textContent = user.phone;
+const params = new URLSearchParams(location.search);
+const custId = params.get("id");
+if (custId) { document.getElementById("pageTitle").textContent = "????"; loadCustomer(custId); }
+
+async function loadCustomer(id) {
+    const r = await api("/customers/" + id + "?merchant_id=" + (user.merchant_id || 0));
+    if (r.code !== 0) { alert("????"); return; }
+    const d = r.data;
+    document.getElementById("name").value = d.name || "";
+    document.getElementById("phone").value = d.phone || "";
+    document.getElementById("wechat").value = d.wechat || "";
+    document.getElementById("email").value = d.email || "";
+    document.getElementById("source").value = d.source || "";
+    document.getElementById("status").value = d.status || "lead";
+    document.getElementById("preferredBreeds").value = d.preferred_breeds || "";
+    document.getElementById("preferredColors").value = d.preferred_colors || "";
+    document.getElementById("budgetMin").value = d.budget_min || "";
+    document.getElementById("budgetMax").value = d.budget_max || "";
+    document.getElementById("address").value = d.address || "";
+    document.getElementById("notes").value = d.notes || "";
+}
+
+async function saveCustomer() {
+    const body = {
+        merchant_id: user.merchant_id || 0,
+        branch_id: 0,
+        name: document.getElementById("name").value,
+        phone: document.getElementById("phone").value || null,
+        wechat: document.getElementById("wechat").value || null,
+        email: document.getElementById("email").value || null,
+        source: document.getElementById("source").value || null,
+        status: document.getElementById("status").value,
+        preferred_breeds: document.getElementById("preferredBreeds").value || null,
+        preferred_colors: document.getElementById("preferredColors").value || null,
+        budget_min: parseFloat(document.getElementById("budgetMin").value) || null,
+        budget_max: parseFloat(document.getElementById("budgetMax").value) || null,
+        address: document.getElementById("address").value || null,
+        notes: document.getElementById("notes").value || null,
+    };
+    const url = custId ? ("/customers/" + custId) : "/customers";
+    const method = custId ? "PUT" : "POST";
+    const r = await api(url, { method, body: JSON.stringify(body) });
+    if (r.code === 0) {
+        alert(custId ? "????" : "????");
+        window.location.href = "/customers.html";
+    } else {
+        alert(r.detail || "????");
+    }
+}
+</script></body></html>
