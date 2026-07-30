@@ -52,7 +52,7 @@
 <script>
 const user = initPage();
 if (!user) { window.location.href = "/"; }
-const PAGES = [["???", "/dashboard.html"],["????", "/cats.html"],["????", "/customers.html"],["????", "/sales.html"],["????", "/health.html"],["??", "/finance.html"],["????", "/branches.html"],["????", "/employees.html"],["????", "/admin/"]];
+const PAGES = [["\ud83d\udcca \u4eea\u8868\u76d8", "/dashboard.html"],["\ud83d\udc31 \u732b\u54aa\u7ba1\u7406", "/cats.html"],["\ud83d\udc64 \u5ba2\u6237\u7ba1\u7406", "/customers.html"],["\ud83d\udcb0 \u9500\u552e\u7ba1\u7406", "/sales.html"],["\ud83d\udd21 \u5065\u5eb7\u7ba1\u7406", "/health.html"],["\ud83d\udcc8 \u8d22\u52a1", "/finance.html"],["\ud83c\udfea \u5206\u5e97\u7ba1\u7406", "/branches.html"],["\ud83d\udc65 \u5458\u5de5\u7ba1\u7406", "/employees.html"],["\u2699 \u7cfb\u7edf\u7ba1\u7406", "/admin/"]];
 buildSidebar(PAGES, 2);
 document.getElementById("userInfo").textContent = user.phone;
 const params = new URLSearchParams(location.search);
@@ -76,9 +76,11 @@ async function loadCustomer(id) {
     document.getElementById("notes").value = d.notes || "";
 }
 async function saveCustomer() {
+    const br = await api("/branches?merchant_id=" + user.merchant_id);
+const branchId = (br.code === 0 && br.data && br.data.length > 0) ? br.data[0].id : 0;
     const body = {
         merchant_id: user.merchant_id || 0,
-        branch_id: 0,
+        branch_id: branchId,
         name: document.getElementById("name").value,
         phone: document.getElementById("phone").value || null,
         wechat: document.getElementById("wechat").value || null,

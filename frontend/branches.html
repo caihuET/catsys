@@ -40,7 +40,7 @@ async function loadBranches() {
     var tb = document.getElementById("branchList");
     if (r.code!==0||!r.data||!r.data.length) { tb.innerHTML = "<tr><td colspan=6 class='text-center text-muted' style='padding:20px'>暂无分店</td></tr>"; return; }
     tb.innerHTML = r.data.map(function(b){
-        return "<tr><td>"+b.id+"</td><td>"+s(b.name)+"</td><td>"+s(b.address)+"</td><td>"+s(b.contact_phone)+"</td><td>"+badge(b.status,{active:"green",closed:"gray"})+"</td><td><span class='wf-btn small'>编辑</span> <span class='wf-btn small danger' onclick='if(confirm(\"确定删除\"))delBranch("+b.id+")'>删除</span></td></tr>";
+        return "<tr><td>"+b.id+"</td><td>"+s(b.name)+"</td><td>"+s(b.address)+"</td><td>"+s(b.contact_phone)+"</td><td>"+badge(b.status,{active:"green",closed:"gray"})+"</td><td><span class='wf-btn small' onclick='editBranch(b.id,"'+b.name+'","'+b.address+'","'+b.contact_phone+'")'>编辑</span> <span class='wf-btn small danger' onclick='if(confirm(\"确定删除\"))delBranch("+b.id+")'>删除</span></td></tr>";
     }).join("");
 }
 async function saveBranch() {
@@ -57,6 +57,40 @@ async function delBranch(id) {
     var r = await api("/branches/" + id, {method:"DELETE"});
     if (r.code===0) { loadBranches(); }
     else { alert(r.detail||"删除失败"); }
+}
+let editingBranchId = null;
+function editBranch(id, name, address, phone) {
+    editingBranchId = id;
+    document.getElementById("bName").value = name;
+    document.getElementById("bAddr").value = address || "";
+    document.getElementById("bPhone").value = phone || "";
+    document.querySelector(".wf-modal-header").textContent = "????";
+    showAddModal();
+}
+// Override saveBranch to support edit
+async function saveBranch() {
+    var body = {
+        merchant_id: user.merchant_id||0,
+        name: document.getElementById("bName").value,
+        address: document.getElementById("bAddr").value||null,
+        contact_phone: document.getElementById("bPhone").value||null
+    };
+    if (!body.name) { alert("???????"); return; }
+    var r;
+    if (editingBranchId) {
+        r = await api("/branches/" + editingBranchId, {method:"PUT", body:JSON.stringify(body)});
+    } else {
+        r = await api("/branches", {method:"POST", body:JSON.stringify(body)});
+    }
+    if (r.code===0) {
+        alert(editingBranchId ? "????" : "????");
+        editingBranchId = null;
+        document.querySelector(".wf-modal-header").textContent = "????";
+        hideAddModal();
+        loadBranches();
+    } else {
+        alert(r.detail||"??");
+    }
 }
 loadBranches();
 </script></body></html>

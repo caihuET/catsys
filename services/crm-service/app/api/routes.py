@@ -59,6 +59,8 @@ def create_customer(req: CustomerCreate):
         first_branch = db.query(Branch).filter(Branch.merchant_id == req.merchant_id).first()
         if first_branch:
             req.branch_id = first_branch.id
+            else:
+                raise HTTPException(status_code=400, detail="????????????????")
     db = get_db_sync()
     c = Customer(**{k: v for k, v in req.dict().items() if v is not None})
     db.add(c); db.commit()
