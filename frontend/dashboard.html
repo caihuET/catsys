@@ -67,7 +67,7 @@ async function loadStats() {
     if (r.code === 0) {
         const d = r.data;
         document.getElementById("stats").innerHTML = [
-            '<a href="/cats.html" class="stat"><div class="num"><span class="underline">' + d.total_cats + '</span></div><div class="label">客户总数</div></a>',
+            '<a href="/cats.html" class="stat"><div class="num"><span class="underline">' + d.total_cats + '</span></div><div class="label">猫咪总数</div></a>',
             '<a href="/customers.html" class="stat"><div class="num"><span class="underline">' + d.total_customers + '</span></div><div class="label">客户总数</div></a>',
             '<div class="stat"><div class="num">' + d.active_reservations + '</div><div class="label">待办预约</div></div>',
             '<a href="/customers.html" class="stat"><div class="num"><span class="underline">' + d.pending_tasks + '</span></div><div class="label">待办任务</div></a>',
