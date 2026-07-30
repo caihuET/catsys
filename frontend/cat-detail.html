@@ -19,22 +19,7 @@
 </head>
 <body>
 <div class="layout">
-<div class="sidebar">
-<div class="logo"><span>猫</span>咖管理系统</div>
-<a href="/dashboard.html">仪表盘</a>
-<a href="/cats.html" class="active">猫咪管理</a>
-<a href="/customers.html">客户管理</a>
-<a href="#" onclick="logout()" style="margin-top:40px;border-top:1px solid rgba(255,255,255,0.1);padding-top:12px;">退出登录</a>
-</div>
-<div class="main">
-<div class="header"><span></span><span id="userInfo"></span></div>
-<div class="content">
-<h2 id="pageTitle">新增猫咪</h2>
-<div class="form-grid" id="catForm">
-<div class="field"><label>名称</label><input id="name" placeholder="猫咪名称"></div>
-<div class="field"><label>品种</label><input id="breed" placeholder="如：布偶猫"></div>
-<div class="field"><label>毛色</label><input id="color" placeholder="如：蓝双"></div>
-<div class="field"><label>性别</label><select id="gender"><option value="">请选择</option><option value="male">公</option><option value="female">母</option></select></div>
+<div class="sidebar" id="sidebar"></div>
 <div class="field"><label>生日</label><input id="birthDate" type="date"></div>
 <div class="field"><label>到店日期</label><input id="arrivalDate" type="date"></div>
 <div class="field"><label>芯片号</label><input id="microchip" placeholder="芯片编号"></div>
@@ -77,11 +62,13 @@ async function loadCat(id) {
 
 async function saveCat() {
     try {
-        const br = await api("/branches?merchant_id=" + user.merchant_id);
-const branchId = (br.code === 0 && br.data && br.data.length > 0) ? br.data[0].id : 0;
-const body = {
+            const br = await api("/branches?merchant_id=" + user.merchant_id);
+        const branchId = (br.code === 0 && br.data && br.data.length > 0) ? br.data[0].id : 0;
+    const body = {
         merchant_id: user.merchant_id || 0,
         branch_id: branchId,
+        if (!document.getElementById("name").value.trim()) { alert("请输入猫咪名称"); return; }
+        if (!document.getElementById("name").value.trim()) { alert("请输入猫咪名称"); return; }
         name: document.getElementById("name").value,
         breed: document.getElementById("breed").value || null,
         color: document.getElementById("color").value || null,

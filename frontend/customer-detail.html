@@ -19,22 +19,7 @@
 </head>
 <body>
 <div class="layout">
-<div class="sidebar">
-<div class="logo"><span>猫</span>咖管理系统</div>
-<a href="/dashboard.html">仪表盘</a>
-<a href="/cats.html">猫咪管理</a>
-<a href="/customers.html" class="active">客户管理</a>
-<a href="#" onclick="logout()" style="margin-top:40px;border-top:1px solid rgba(255,255,255,0.1);padding-top:12px;">退出登录</a>
-</div>
-<div class="main">
-<div class="header"><span></span><span id="userInfo"></span></div>
-<div class="content">
-<h2 id="pageTitle">新增客户</h2>
-<div class="form-grid">
-<div class="field"><label>姓名</label><input id="name" placeholder="客户姓名"></div>
-<div class="field"><label>手机号</label><input id="phone" placeholder="手机号"></div>
-<div class="field"><label>微信</label><input id="wechat" placeholder="微信号"></div>
-<div class="field"><label>邮箱</label><input id="email" type="email" placeholder="邮箱"></div>
+<div class="sidebar" id="sidebar"></div>
 <div class="field"><label>来源</label><input id="source" placeholder="如：小红书"></div>
 <div class="field"><label>状态</label><select id="status"><option value="lead">潜在</option><option value="interested">有意向</option><option value="contracted">已签约</option><option value="owner">已购买</option><option value="lost">已流失</option></select></div>
 <div class="field"><label>偏好品种</label><input id="preferredBreeds" placeholder="如：布偶猫, 英短"></div>
@@ -76,11 +61,13 @@ async function loadCustomer(id) {
     document.getElementById("notes").value = d.notes || "";
 }
 async function saveCustomer() {
-    const br = await api("/branches?merchant_id=" + user.merchant_id);
-const branchId = (br.code === 0 && br.data && br.data.length > 0) ? br.data[0].id : 0;
+        const br = await api("/branches?merchant_id=" + user.merchant_id);
+    const branchId = (br.code === 0 && br.data && br.data.length > 0) ? br.data[0].id : 0;
     const body = {
         merchant_id: user.merchant_id || 0,
         branch_id: branchId,
+        if (!document.getElementById("name").value.trim()) { alert("请输入客户姓名"); return; }
+        if (!document.getElementById("name").value.trim()) { alert("请输入客户姓名"); return; }
         name: document.getElementById("name").value,
         phone: document.getElementById("phone").value || null,
         wechat: document.getElementById("wechat").value || null,

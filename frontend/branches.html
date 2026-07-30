@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -33,41 +33,20 @@
 const user = initPage();
 const PAGES = [["\ud83d\udcca 仪表盘","/dashboard.html"],["\ud83d\udc31 猫咪管理","/cats.html"],["\ud83d\udc64 客户管理","/customers.html"],["\ud83d\udcb0 销售管理","/sales.html"],["\ud83d\udd21 健康管理","/health.html"],["\ud83d\udcc8 财务","/finance.html"],["\ud83c\udfea 分店管理","/branches.html"],["\ud83d\udc65 员工管理","/employees.html"],["\u2699 系统管理","/admin/"]];
 buildSidebar(PAGES, 6);
+
+let branchData = [];
+let editingBranchId = null;
 function showAddModal() { document.getElementById("addModal").classList.add("show"); }
 function hideAddModal() { document.getElementById("addModal").classList.remove("show"); }
 async function loadBranches() {
     var r = await api("/branches?merchant_id=" + (user.merchant_id||0));
     var tb = document.getElementById("branchList");
     if (r.code!==0||!r.data||!r.data.length) { tb.innerHTML = "<tr><td colspan=6 class='text-center text-muted' style='padding:20px'>暂无分店</td></tr>"; return; }
+    branchData = r.data;
     tb.innerHTML = r.data.map(function(b){
-        return "<tr><td>"+b.id+"</td><td>"+s(b.name)+"</td><td>"+s(b.address)+"</td><td>"+s(b.contact_phone)+"</td><td>"+badge(b.status,{active:"green",closed:"gray"})+"</td><td><span class='wf-btn small' onclick='editBranch(b.id,"'+b.name+'","'+b.address+'","'+b.contact_phone+'")'>编辑</span> <span class='wf-btn small danger' onclick='if(confirm(\"确定删除\"))delBranch("+b.id+")'>删除</span></td></tr>";
+        return "<tr><td>"+b.id+"</td><td>"+s(b.name)+"</td><td>"+s(b.address)+"</td><td>"+s(b.contact_phone)+"</td><td>"+badge(b.status,{active:"green",closed:"gray"})+"</td><td><span class='wf-btn small' onclick='editBranchById("+b.id+")'>编辑</span> <span class='wf-btn small danger' onclick='if(confirm(\"确定删除\"))delBranch("+b.id+")'>删除</span></td></tr>";
     }).join("");
 }
-async function saveBranch() {
-    var body = {
-        merchant_id: user.merchant_id||0, name: document.getElementById("bName").value,
-        address: document.getElementById("bAddr").value||null, contact_phone: document.getElementById("bPhone").value||null
-    };
-    if (!body.name) { alert("请输入分店名称"); return; }
-    var r = await api("/branches", {method:"POST", body:JSON.stringify(body)});
-    if (r.code===0) { alert("新增成功"); hideAddModal(); loadBranches(); }
-    else { alert(r.detail||"失败"); }
-}
-async function delBranch(id) {
-    var r = await api("/branches/" + id, {method:"DELETE"});
-    if (r.code===0) { loadBranches(); }
-    else { alert(r.detail||"删除失败"); }
-}
-let editingBranchId = null;
-function editBranch(id, name, address, phone) {
-    editingBranchId = id;
-    document.getElementById("bName").value = name;
-    document.getElementById("bAddr").value = address || "";
-    document.getElementById("bPhone").value = phone || "";
-    document.querySelector(".wf-modal-header").textContent = "????";
-    showAddModal();
-}
-// Override saveBranch to support edit
 async function saveBranch() {
     var body = {
         merchant_id: user.merchant_id||0,
@@ -75,7 +54,7 @@ async function saveBranch() {
         address: document.getElementById("bAddr").value||null,
         contact_phone: document.getElementById("bPhone").value||null
     };
-    if (!body.name) { alert("???????"); return; }
+    if (!body.name) { alert("请输入分店名称"); return; }
     var r;
     if (editingBranchId) {
         r = await api("/branches/" + editingBranchId, {method:"PUT", body:JSON.stringify(body)});
@@ -83,14 +62,29 @@ async function saveBranch() {
         r = await api("/branches", {method:"POST", body:JSON.stringify(body)});
     }
     if (r.code===0) {
-        alert(editingBranchId ? "????" : "????");
+        alert(editingBranchId ? "保存成功" : "新增成功");
         editingBranchId = null;
-        document.querySelector(".wf-modal-header").textContent = "????";
+        document.querySelector(".wf-modal-header").textContent = "编辑分店";
         hideAddModal();
         loadBranches();
     } else {
-        alert(r.detail||"??");
+        alert(r.detail||"失败");
     }
+}
+async function delBranch(id) {
+    var r = await api("/branches/" + id, {method:"DELETE"});
+    if (r.code===0) { loadBranches(); }
+    else { alert(r.detail||"删除失败"); }
+}
+function editBranchById(id) {
+    var b = branchData.find(function(item) { return item.id === id; });
+    if (!b) { alert("未找到分店数据"); return; }
+    editingBranchId = id;
+    document.getElementById("bName").value = b.name;
+    document.getElementById("bAddr").value = b.address || "";
+    document.getElementById("bPhone").value = b.contact_phone || "";
+    document.querySelector(".wf-modal-header").textContent = "编辑分店";
+    showAddModal();
 }
 loadBranches();
 </script></body></html>
