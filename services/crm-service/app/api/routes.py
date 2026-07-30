@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional
 from src.shared.database import get_db_sync
-from src.shared.models import Customer, Reservation, Contract, FollowupTask
+from src.shared.models import Customer, Reservation, Contract, FollowupTask, Branch
 import datetime
 
 router = APIRouter()
@@ -53,6 +53,12 @@ def list_customers(branch_id: Optional[int] = None, merchant_id: Optional[int] =
 
 @router.post("/customers")
 def create_customer(req: CustomerCreate):
+    # 处理 branch_id=0: 自动查找商家第一个分店
+    if req.merchant_id and (not req.branch_id or req.branch_id <= 0):
+        db = get_db_sync()
+        first_branch = db.query(Branch).filter(Branch.merchant_id == req.merchant_id).first()
+        if first_branch:
+            req.branch_id = first_branch.id
     db = get_db_sync()
     c = Customer(**{k: v for k, v in req.dict().items() if v is not None})
     db.add(c); db.commit()

@@ -88,7 +88,7 @@ async function loadCustomer(id) {
 }
 async function saveCustomer() {
     const body = {
-        merchant_id: user.merchant_id || 0, branch_id: 0,
+        merchant_id: user.merchant_id || 0,
         name: document.getElementById("name").value,
         phone: document.getElementById("phone").value || null,
         wechat: document.getElementById("wechat").value || null,

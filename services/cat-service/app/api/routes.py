@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional, List
 from src.shared.database import get_db_sync
-from src.shared.models import Cat, HealthRecord
+from src.shared.models import Cat, HealthRecord, Branch
 import datetime
 
 router = APIRouter()
@@ -80,6 +80,14 @@ def list_cats(branch_id: Optional[int] = None, merchant_id: Optional[int] = None
 
 @router.post("/cats")
 def create_cat(req: CatCreate):
+    # 处理 branch_id=0: 自动查找商家第一个分店
+    if req.branch_id <= 0:
+        db = get_db_sync()
+        first_branch = db.query(Branch).filter(Branch.merchant_id == req.merchant_id).first()
+        if first_branch:
+            req.branch_id = first_branch.id
+        else:
+            raise HTTPException(status_code=400, detail="此商家尚未创建分店，请先创建分店")
     db = get_db_sync()
     cat = Cat(**{k: v for k, v in req.dict().items() if v is not None})
     if req.birth_date:
@@ -115,6 +123,14 @@ def get_cat(cat_id: int):
 
 @router.put("/cats/{cat_id}")
 def update_cat(cat_id: int, req: CatCreate):
+    # 处理 branch_id=0: 自动查找商家第一个分店
+    if req.branch_id <= 0:
+        db = get_db_sync()
+        first_branch = db.query(Branch).filter(Branch.merchant_id == req.merchant_id).first()
+        if first_branch:
+            req.branch_id = first_branch.id
+        else:
+            raise HTTPException(status_code=400, detail="此商家尚未创建分店，请先创建分店")
     db = get_db_sync()
     c = db.query(Cat).filter(Cat.id == cat_id).first()
     if not c:

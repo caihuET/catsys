@@ -89,7 +89,7 @@ async function loadCat(id) {
 async function saveCat() {
     try {
         const body = {
-        merchant_id: user.merchant_id || 0, branch_id: 0,
+        merchant_id: user.merchant_id || 0,
         name: document.getElementById("name").value,
         breed: document.getElementById("breed").value || null,
         color: document.getElementById("color").value || null,
