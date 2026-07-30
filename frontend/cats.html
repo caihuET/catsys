@@ -31,10 +31,10 @@ const user = initPage();
 const PAGES = [["\ud83d\udcca 仪表盘","/dashboard.html"],["\ud83d\udc31 猫咪管理","/cats.html"],["\ud83d\udc64 客户管理","/customers.html"],["\ud83d\udcb0 销售管理","/sales.html"],["\ud83d\udd21 健康管理","/health.html"],["\ud83d\udcc8 财务","/finance.html"],["\ud83c\udfea 分店管理","/branches.html"],["\ud83d\udc65 员工管理","/employees.html"],["\u2699 系统管理","/admin/"]];
 buildSidebar(PAGES, 1);
 async function loadCats() {
-    const s = document.getElementById("search").value;
+    const q = document.getElementById("search").value;
     const st = document.getElementById("filterStatus").value;
     let url = "/cats?merchant_id=" + (user.merchant_id || 0);
-    if (s) url += "&search=" + s;
+    if (q) url += "&search=" + s;
     if (st) url += "&status=" + st;
     const r = await api(url);
     const tb = document.getElementById("catList");
