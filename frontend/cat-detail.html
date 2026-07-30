@@ -1,9 +1,13 @@
-<!DOCTYPE html><html lang="zh-CN"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>???? - ??????</title><script src="/js/api.js"></script>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>猫咪详情 - 猫咖管理系统</title>
+<script src="/js/api.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,"Microsoft YaHei",sans-serif;background:#f0f2f5;color:#333;font-size:14px}
+body{font-family:-apple-system,'Microsoft YaHei',sans-serif;background:#f0f2f5;color:#333;font-size:14px}
 .layout{display:flex;min-height:100vh}
 .sidebar{width:200px;background:#001529;color:#fff}
 .sidebar .logo{padding:16px;font-size:16px;font-weight:bold;border-bottom:1px solid rgba(255,255,255,0.1)}
@@ -24,35 +28,37 @@ h2{font-size:18px;margin-bottom:16px;color:#333}
 .btn{padding:7px 20px;background:#1890ff;color:#fff;border:none;border-radius:4px;font-size:14px;cursor:pointer}
 .btn:hover{opacity:0.85}
 .btn-cancel{background:#fff;color:#666;border:1px solid #d9d9d9;margin-right:8px}
-</style></head><body>
+</style>
+</head>
+<body>
 <div class="layout">
 <div class="sidebar">
-<div class="logo"><span>?</span>?????</div>
-<a href="/dashboard.html">???</a>
-<a href="/cats.html" class="active">????</a>
-<a href="/customers.html">????</a>
-<a href="#" onclick="logout()" style="margin-top:40px;border-top:1px solid rgba(255,255,255,0.1);padding-top:12px;">????</a>
+<div class="logo"><span>猫</span>咖管理系统</div>
+<a href="/dashboard.html">仪表盘</a>
+<a href="/cats.html" class="active">猫咪管理</a>
+<a href="/customers.html">客户管理</a>
+<a href="#" onclick="logout()" style="margin-top:40px;border-top:1px solid rgba(255,255,255,0.1);padding-top:12px;">退出登录</a>
 </div>
 <div class="main">
 <div class="header"><span></span><span id="userInfo"></span></div>
 <div class="content">
-<h2 id="pageTitle">????</h2>
+<h2 id="pageTitle">新增猫咪</h2>
 <div class="form-grid" id="catForm">
-<div class="field"><label>??</label><input id="name" placeholder="????"></div>
-<div class="field"><label>??</label><input id="breed" placeholder="?????"></div>
-<div class="field"><label>??</label><input id="color" placeholder="????"></div>
-<div class="field"><label>??</label><select id="gender"><option value="">???</option><option value="male">?</option><option value="female">?</option></select></div>
-<div class="field"><label>????</label><input id="birthDate" type="date"></div>
-<div class="field"><label>????</label><input id="arrivalDate" type="date"></div>
-<div class="field"><label>???</label><input id="microchip" placeholder="????"></div>
-<div class="field"><label>???</label><input id="pedigree" placeholder="??????"></div>
-<div class="field"><label>??</label><select id="status"><option value="available">??</option><option value="reserved">???</option><option value="sold">??</option><option value="fostering">??</option><option value="retired">??</option></select></div>
-<div class="field"><label>??(?)</label><input id="price" type="number" placeholder="0"></div>
-<div class="field" style="grid-column:1/-1"><label>??</label><textarea id="notes" placeholder="????"></textarea></div>
+<div class="field"><label>名称</label><input id="name" placeholder="猫咪名称"></div>
+<div class="field"><label>品种</label><input id="breed" placeholder="如：布偶猫"></div>
+<div class="field"><label>毛色</label><input id="color" placeholder="如：蓝双"></div>
+<div class="field"><label>性别</label><select id="gender"><option value="">请选择</option><option value="male">公</option><option value="female">母</option></select></div>
+<div class="field"><label>生日</label><input id="birthDate" type="date"></div>
+<div class="field"><label>到店日期</label><input id="arrivalDate" type="date"></div>
+<div class="field"><label>芯片号</label><input id="microchip" placeholder="芯片编号"></div>
+<div class="field"><label>血统号</label><input id="pedigree" placeholder="血统证书编号"></div>
+<div class="field"><label>状态</label><select id="status"><option value="available">在售</option><option value="reserved">已预订</option><option value="sold">已售</option><option value="fostering">寄养</option><option value="retired">退役</option></select></div>
+<div class="field"><label>售价(元)</label><input id="price" type="number" placeholder="0"></div>
+<div class="field" style="grid-column:1/-1"><label>备注</label><textarea id="notes" placeholder="备注信息"></textarea></div>
 </div>
 <div class="actions">
-<button class="btn btn-cancel" onclick="history.back()">??</button>
-<button class="btn" onclick="saveCat()">??</button>
+<button class="btn btn-cancel" onclick="history.back()">取消</button>
+<button class="btn" onclick="saveCat()">保存</button>
 </div>
 </div></div></div>
 <script>
@@ -61,11 +67,11 @@ if (!user) { window.location.href = "/"; }
 document.getElementById("userInfo").textContent = user.phone;
 const params = new URLSearchParams(location.search);
 const catId = params.get("id");
-if (catId) { document.getElementById("pageTitle").textContent = "????"; loadCat(catId); }
+if (catId) { document.getElementById("pageTitle").textContent = "\u7f16\u8f91\u732b\u54aa"; loadCat(catId); }
 
 async function loadCat(id) {
     const r = await api("/cats/" + id + "?merchant_id=" + (user.merchant_id || 0));
-    if (r.code !== 0) { alert("????"); return; }
+    if (r.code !== 0) { alert("\u52a0\u8f7d\u5931\u8d25"); return; }
     const d = r.data;
     document.getElementById("name").value = d.name || "";
     document.getElementById("breed").value = d.breed || "";
@@ -82,8 +88,7 @@ async function loadCat(id) {
 
 async function saveCat() {
     const body = {
-        merchant_id: user.merchant_id || 0,
-        branch_id: 0,
+        merchant_id: user.merchant_id || 0, branch_id: 0,
         name: document.getElementById("name").value,
         breed: document.getElementById("breed").value || null,
         color: document.getElementById("color").value || null,
@@ -100,10 +105,12 @@ async function saveCat() {
     const method = catId ? "PUT" : "POST";
     const r = await api(url, { method, body: JSON.stringify(body) });
     if (r.code === 0) {
-        alert(catId ? "????" : "????");
+        alert(catId ? "\u4fdd\u5b58\u6210\u529f" : "\u65b0\u589e\u6210\u529f");
         window.location.href = "/cats.html";
     } else {
-        alert(r.detail || "????");
+        alert(r.detail || "\u64cd\u4f5c\u5931\u8d25");
     }
 }
-</script></body></html>
+</script>
+</body>
+</html>

@@ -1,16 +1,20 @@
-<!DOCTYPE html><html lang="zh-CN"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>???? - ??????</title><script src="/js/api.js"></script>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>客户详情 - 猫咖管理系统</title>
+<script src="/js/api.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,"Microsoft YaHei",sans-serif;background:#f0f2f5;color:#333;font-size:14px}
+body{font-family:-apple-system,"Microsoft YaHei",sans-serif;background:#f0f2f5;color:#333;font-size:14px;min-height:100vh}
 .layout{display:flex;min-height:100vh}
-.sidebar{width:200px;background:#001529;color:#fff}
+.sidebar{width:200px;background:#001529;color:#fff;flex-shrink:0}
 .sidebar .logo{padding:16px;font-size:16px;font-weight:bold;border-bottom:1px solid rgba(255,255,255,0.1)}
 .sidebar .logo span{color:#1890ff}
 .sidebar a{display:block;padding:10px 16px;color:rgba(255,255,255,0.65);text-decoration:none;font-size:13px}
 .sidebar a:hover,.sidebar a.active{background:rgba(255,255,255,0.08);color:#fff}
-.main{flex:1}
+.main{flex:1;min-width:0}
 .header{height:50px;background:#fff;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
 .content{padding:20px}
 h2{font-size:18px;margin-bottom:16px;color:#333}
@@ -24,36 +28,38 @@ h2{font-size:18px;margin-bottom:16px;color:#333}
 .btn{padding:7px 20px;background:#1890ff;color:#fff;border:none;border-radius:4px;font-size:14px;cursor:pointer}
 .btn:hover{opacity:0.85}
 .btn-cancel{background:#fff;color:#666;border:1px solid #d9d9d9;margin-right:8px}
-</style></head><body>
+</style>
+</head>
+<body>
 <div class="layout">
 <div class="sidebar">
-<div class="logo"><span>?</span>?????</div>
-<a href="/dashboard.html">???</a>
-<a href="/cats.html">????</a>
-<a href="/customers.html" class="active">????</a>
-<a href="#" onclick="logout()" style="margin-top:40px;border-top:1px solid rgba(255,255,255,0.1);padding-top:12px;">????</a>
+<div class="logo"><span>猫</span>咖管理系统</div>
+<a href="/dashboard.html">仪表盘</a>
+<a href="/cats.html">猫咪管理</a>
+<a href="/customers.html" class="active">客户管理</a>
+<a href="#" onclick="logout()" style="margin-top:40px;border-top:1px solid rgba(255,255,255,0.1);padding-top:12px;">退出登录</a>
 </div>
 <div class="main">
 <div class="header"><span></span><span id="userInfo"></span></div>
 <div class="content">
-<h2 id="pageTitle">????</h2>
+<h2 id="pageTitle">新增客户</h2>
 <div class="form-grid">
-<div class="field"><label>??</label><input id="name" placeholder="????"></div>
-<div class="field"><label>???</label><input id="phone" placeholder="???"></div>
-<div class="field"><label>??</label><input id="wechat" placeholder="???"></div>
-<div class="field"><label>??</label><input id="email" type="email" placeholder="??"></div>
-<div class="field"><label>??</label><input id="source" placeholder="?????"></div>
-<div class="field"><label>??</label><select id="status"><option value="lead">??</option><option value="interested">???</option><option value="contracted">???</option><option value="owner">???</option><option value="lost">???</option></select></div>
-<div class="field"><label>????</label><input id="preferredBreeds" placeholder="?????, ??"></div>
-<div class="field"><label>????</label><input id="preferredColors" placeholder="????, ???"></div>
-<div class="field"><label>????(?)</label><input id="budgetMin" type="number" placeholder="0"></div>
-<div class="field"><label>????(?)</label><input id="budgetMax" type="number" placeholder="0"></div>
-<div class="field" style="grid-column:1/-1"><label>??</label><input id="address" placeholder="??"></div>
-<div class="field" style="grid-column:1/-1"><label>??</label><textarea id="notes" placeholder="????"></textarea></div>
+<div class="field"><label>姓名</label><input id="name" placeholder="客户姓名"></div>
+<div class="field"><label>手机号</label><input id="phone" placeholder="手机号"></div>
+<div class="field"><label>微信</label><input id="wechat" placeholder="微信号"></div>
+<div class="field"><label>邮箱</label><input id="email" type="email" placeholder="邮箱"></div>
+<div class="field"><label>来源</label><input id="source" placeholder="如：小红书"></div>
+<div class="field"><label>状态</label><select id="status"><option value="lead">潜在</option><option value="interested">有意向</option><option value="contracted">已签约</option><option value="owner">已购买</option><option value="lost">已流失</option></select></div>
+<div class="field"><label>偏好品种</label><input id="preferredBreeds" placeholder="如：布偶猫, 英短"></div>
+<div class="field"><label>偏好颜色</label><input id="preferredColors" placeholder="如：蓝双, 金渐层"></div>
+<div class="field"><label>预算下限(元)</label><input id="budgetMin" type="number" placeholder="0"></div>
+<div class="field"><label>预算上限(元)</label><input id="budgetMax" type="number" placeholder="0"></div>
+<div class="field" style="grid-column:1/-1"><label>地址</label><input id="address" placeholder="地址"></div>
+<div class="field" style="grid-column:1/-1"><label>备注</label><textarea id="notes" placeholder="备注信息"></textarea></div>
 </div>
 <div class="actions">
-<button class="btn btn-cancel" onclick="history.back()">??</button>
-<button class="btn" onclick="saveCustomer()">??</button>
+<button class="btn btn-cancel" onclick="history.back()">取消</button>
+<button class="btn" onclick="saveCustomer()">保存</button>
 </div>
 </div></div></div>
 <script>
@@ -62,11 +68,10 @@ if (!user) { window.location.href = "/"; }
 document.getElementById("userInfo").textContent = user.phone;
 const params = new URLSearchParams(location.search);
 const custId = params.get("id");
-if (custId) { document.getElementById("pageTitle").textContent = "????"; loadCustomer(custId); }
-
+if (custId) { document.getElementById("pageTitle").textContent = "\u7f16\u8f91\u5ba2\u6237"; loadCustomer(custId); }
 async function loadCustomer(id) {
     const r = await api("/customers/" + id + "?merchant_id=" + (user.merchant_id || 0));
-    if (r.code !== 0) { alert("????"); return; }
+    if (r.code !== 0) { alert("\u52a0\u8f7d\u5931\u8d25"); return; }
     const d = r.data;
     document.getElementById("name").value = d.name || "";
     document.getElementById("phone").value = d.phone || "";
@@ -81,11 +86,9 @@ async function loadCustomer(id) {
     document.getElementById("address").value = d.address || "";
     document.getElementById("notes").value = d.notes || "";
 }
-
 async function saveCustomer() {
     const body = {
-        merchant_id: user.merchant_id || 0,
-        branch_id: 0,
+        merchant_id: user.merchant_id || 0, branch_id: 0,
         name: document.getElementById("name").value,
         phone: document.getElementById("phone").value || null,
         wechat: document.getElementById("wechat").value || null,
@@ -103,10 +106,12 @@ async function saveCustomer() {
     const method = custId ? "PUT" : "POST";
     const r = await api(url, { method, body: JSON.stringify(body) });
     if (r.code === 0) {
-        alert(custId ? "????" : "????");
+        alert(custId ? "\u4fdd\u5b58\u6210\u529f" : "\u65b0\u589e\u6210\u529f");
         window.location.href = "/customers.html";
     } else {
-        alert(r.detail || "????");
+        alert(r.detail || "\u64cd\u4f5c\u5931\u8d25");
     }
 }
-</script></body></html>
+</script>
+</body>
+</html>
