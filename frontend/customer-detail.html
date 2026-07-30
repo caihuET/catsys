@@ -4,30 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>客户详情 - 猫咖管理系统</title>
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/style.css">
 <script src="/js/api.js"></script>
+<script src="/js/sidebar.js"></script>
+<script src="/js/sidebar.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,"Microsoft YaHei",sans-serif;background:#f0f2f5;color:#333;font-size:14px;min-height:100vh}
-.layout{display:flex;min-height:100vh}
-.sidebar{width:200px;background:#001529;color:#fff;flex-shrink:0}
-.sidebar .logo{padding:16px;font-size:16px;font-weight:bold;border-bottom:1px solid rgba(255,255,255,0.1)}
-.sidebar .logo span{color:#1890ff}
-.sidebar a{display:block;padding:10px 16px;color:rgba(255,255,255,0.65);text-decoration:none;font-size:13px}
-.sidebar a:hover,.sidebar a.active{background:rgba(255,255,255,0.08);color:#fff}
-.main{flex:1;min-width:0}
-.header{height:50px;background:#fff;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
-.content{padding:20px}
-h2{font-size:18px;margin-bottom:16px;color:#333}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:700px;background:#fff;padding:20px;border-radius:6px;border:1px solid #e8e8e8}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;background:#fff;padding:20px;border-radius:6px;border:1px solid #e8e8e8;max-width:700px}
 .field{display:flex;flex-direction:column;gap:4px}
 .field label{font-size:13px;color:#666;font-weight:500}
+.required-star{color:#ff4d4f;margin-left:2px}
 .field input,.field select,.field textarea{padding:7px 10px;border:1px solid #d9d9d9;border-radius:4px;font-size:13px;outline:none}
 .field input:focus,.field select:focus{border-color:#1890ff}
 .field textarea{min-height:60px;resize:vertical}
-.actions{text-align:right;margin-top:16px;max-width:700px}
-.btn{padding:7px 20px;background:#1890ff;color:#fff;border:none;border-radius:4px;font-size:14px;cursor:pointer}
-.btn:hover{opacity:0.85}
-.btn-cancel{background:#fff;color:#666;border:1px solid #d9d9d9;margin-right:8px}
+.actions{text-align:right;margin-top:16px}
+.btn.disabled{opacity:0.5;cursor:not-allowed;pointer-events:none}
 </style>
 </head>
 <body>
@@ -38,8 +29,8 @@ h2{font-size:18px;margin-bottom:16px;color:#333}
 <div class="content">
 <h2 id="pageTitle">新增客户</h2>
 <div class="form-grid">
-<div class="field"><label>姓名</label><input id="name" placeholder="客户姓名"></div>
-<div class="field"><label>手机号</label><input id="phone" placeholder="手机号"></div>
+<div class="field"><label>姓名<span class="required-star">*</span></label><input id="name" required required placeholder="客户姓名"></div>
+<div class="field"><label>手机号<span class="required-star">*</span></label><input id="phone" required required placeholder="手机号"></div>
 <div class="field"><label>微信</label><input id="wechat" placeholder="微信号"></div>
 <div class="field"><label>邮箱</label><input id="email" type="email" placeholder="邮箱"></div>
 <div class="field"><label>来源</label><input id="source" placeholder="如：小红书"></div>
@@ -53,7 +44,7 @@ h2{font-size:18px;margin-bottom:16px;color:#333}
 </div>
 <div class="actions">
 <button class="btn btn-cancel" onclick="history.back()">取消</button>
-<button class="btn" onclick="saveCustomer()">保存</button>
+<button class="btn" id="saveCustomerBtn" onclick="saveCustomer()">保存</button>
 </div>
 </div></div></div>
 <script>
@@ -82,11 +73,67 @@ async function loadCustomer(id) {
     document.getElementById("address").value = d.address || "";
     document.getElementById("notes").value = d.notes || "";
 }
+
+// 表单验证 - 必填字段控制
+function checkForm() {
+    var fields = ["name", "phone"];
+    var allFilled = true;
+    for (var i = 0; i < fields.length; i++) {
+        var el = document.getElementById(fields[i]);
+        if (!el || !el.value.trim()) { allFilled = false; break; }
+    }
+    var btn = document.getElementById("saveCustomerBtn");
+    if (btn) {
+        if (allFilled) {
+            btn.classList.remove("disabled");
+            btn.disabled = false;
+        } else {
+            btn.classList.add("disabled");
+            btn.disabled = true;
+        }
+    }
+    return allFilled;
+}
+// 为必填字段绑定输入事件
+document.addEventListener("DOMContentLoaded", function() {
+    var fields = ["name", "phone"];
+    for (var i = 0; i < fields.length; i++) {
+        var el = document.getElementById(fields[i]);
+        if (el) el.addEventListener("input", checkForm);
+    }
+    checkForm();
+});
+
+function checkForm() {
+    var fields = ["name", "phone"];
+    for (var i = 0; i < fields.length; i++) {
+        var el = document.getElementById(fields[i]);
+        if (!el || !el.value.trim()) {
+            document.getElementById("saveCustomerBtn").classList.add("disabled");
+            document.getElementById("saveCustomerBtn").disabled = true;
+            return false;
+        }
+    }
+    document.getElementById("saveCustomerBtn").classList.remove("disabled");
+    document.getElementById("saveCustomerBtn").disabled = false;
+    return true;
+}
+(function() {
+    var fields = ["name", "phone"];
+    for (var i = 0; i < fields.length; i++) {
+        var el = document.getElementById(fields[i]);
+        if (el) el.addEventListener("input", checkForm);
+    }
+    checkForm();
+})();
 async function saveCustomer() {
     const br = await api("/branches?merchant_id=" + user.merchant_id);
     const branchId = (br.code === 0 && br.data && br.data.length > 0) ? br.data[0].id : 0;
+    if (!checkForm()) { alert("请填写所有必填项"); return; }
     const body = {
         merchant_id: user.merchant_id || 0,
+        branch_id: branchId,
+        branch_id: branchId,
         name: document.getElementById("name").value,
         phone: document.getElementById("phone").value || null,
         wechat: document.getElementById("wechat").value || null,

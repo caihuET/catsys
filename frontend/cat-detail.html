@@ -4,30 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>猫咪详情 - 猫咖管理系统</title>
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/style.css">
 <script src="/js/api.js"></script>
+<script src="/js/sidebar.js"></script>
+<script src="/js/sidebar.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,'Microsoft YaHei',sans-serif;background:#f0f2f5;color:#333;font-size:14px}
-.layout{display:flex;min-height:100vh}
-.sidebar{width:200px;background:#001529;color:#fff}
-.sidebar .logo{padding:16px;font-size:16px;font-weight:bold;border-bottom:1px solid rgba(255,255,255,0.1)}
-.sidebar .logo span{color:#1890ff}
-.sidebar a{display:block;padding:10px 16px;color:rgba(255,255,255,0.65);text-decoration:none;font-size:13px}
-.sidebar a:hover,.sidebar a.active{background:rgba(255,255,255,0.08);color:#fff}
-.main{flex:1}
-.header{height:50px;background:#fff;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
-.content{padding:20px}
-h2{font-size:18px;margin-bottom:16px;color:#333}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:700px;background:#fff;padding:20px;border-radius:6px;border:1px solid #e8e8e8}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;background:#fff;padding:20px;border-radius:6px;border:1px solid #e8e8e8;max-width:700px}
 .field{display:flex;flex-direction:column;gap:4px}
 .field label{font-size:13px;color:#666;font-weight:500}
+.required-star{color:#ff4d4f;margin-left:2px}
 .field input,.field select,.field textarea{padding:7px 10px;border:1px solid #d9d9d9;border-radius:4px;font-size:13px;outline:none}
 .field input:focus,.field select:focus{border-color:#1890ff}
 .field textarea{min-height:60px;resize:vertical}
-.actions{text-align:right;margin-top:16px;max-width:700px}
-.btn{padding:7px 20px;background:#1890ff;color:#fff;border:none;border-radius:4px;font-size:14px;cursor:pointer}
-.btn:hover{opacity:0.85}
-.btn-cancel{background:#fff;color:#666;border:1px solid #d9d9d9;margin-right:8px}
+.actions{text-align:right;margin-top:16px}
+.btn.disabled{opacity:0.5;cursor:not-allowed;pointer-events:none}
 </style>
 </head>
 <body>
@@ -38,12 +29,12 @@ h2{font-size:18px;margin-bottom:16px;color:#333}
 <div class="content">
 <h2 id="pageTitle">新增猫咪</h2>
 <div class="form-grid" id="catForm">
-<div class="field"><label>名称</label><input id="name" placeholder="猫咪名称"></div>
-<div class="field"><label>品种</label><input id="breed" placeholder="如：布偶猫"></div>
+<div class="field"><label>名称<span class="required-star">*</span></label><input id="name" required required placeholder="猫咪名称"></div>
+<div class="field"><label>品种<span class="required-star">*</span></label><input id="breed" required required placeholder="如：布偶猫"></div>
 <div class="field"><label>毛色</label><input id="color" placeholder="如：蓝双"></div>
-<div class="field"><label>性别</label><select id="gender"><option value="">请选择</option><option value="male">公</option><option value="female">母</option></select></div>
+<div class="field"><label>性别<span class="required-star">*</span></label><select id="gender" required required><option value="">请选择</option><option value="male">公</option><option value="female">母</option></select></div>
 <div class="field"><label>生日</label><input id="birthDate" type="date"></div>
-<div class="field"><label>到店日期</label><input id="arrivalDate" type="date"></div>
+<div class="field"><label>到店日期<span class="required-star">*</span></label><input id="arrivalDate" required required type="date"></div>
 <div class="field"><label>芯片号</label><input id="microchip" placeholder="芯片编号"></div>
 <div class="field"><label>血统号</label><input id="pedigree" placeholder="血统证书编号"></div>
 <div class="field"><label>状态</label><select id="status"><option value="available">在售</option><option value="reserved">已预订</option><option value="sold">已售</option><option value="fostering">寄养</option><option value="retired">退役</option></select></div>
@@ -52,7 +43,7 @@ h2{font-size:18px;margin-bottom:16px;color:#333}
 </div>
 <div class="actions">
 <button class="btn btn-cancel" onclick="history.back()">取消</button>
-<button class="btn" onclick="saveCat()">保存</button>
+<button class="btn" id="saveCatBtn" onclick="saveCat()">保存</button>
 </div>
 </div></div></div>
 <script>
@@ -82,12 +73,68 @@ async function loadCat(id) {
     document.getElementById("notes").value = d.notes || "";
 }
 
+
+// 表单验证 - 必填字段控制
+function checkForm() {
+    var fields = ["name", "breed", "gender", "arrivalDate"];
+    var allFilled = true;
+    for (var i = 0; i < fields.length; i++) {
+        var el = document.getElementById(fields[i]);
+        if (!el || !el.value.trim()) { allFilled = false; break; }
+    }
+    var btn = document.getElementById("saveCatBtn");
+    if (btn) {
+        if (allFilled) {
+            btn.classList.remove("disabled");
+            btn.disabled = false;
+        } else {
+            btn.classList.add("disabled");
+            btn.disabled = true;
+        }
+    }
+    return allFilled;
+}
+// 为必填字段绑定输入事件
+document.addEventListener("DOMContentLoaded", function() {
+    var fields = ["name", "breed", "gender", "arrivalDate"];
+    for (var i = 0; i < fields.length; i++) {
+        var el = document.getElementById(fields[i]);
+        if (el) el.addEventListener("input", checkForm);
+    }
+    checkForm();
+});
+
+function checkForm() {
+    var fields = ["name", "breed", "gender", "arrivalDate"];
+    for (var i = 0; i < fields.length; i++) {
+        var el = document.getElementById(fields[i]);
+        if (!el || !el.value.trim()) {
+            document.getElementById("saveCatBtn").classList.add("disabled");
+            document.getElementById("saveCatBtn").disabled = true;
+            return false;
+        }
+    }
+    document.getElementById("saveCatBtn").classList.remove("disabled");
+    document.getElementById("saveCatBtn").disabled = false;
+    return true;
+}
+(function() {
+    var fields = ["name", "breed", "gender", "arrivalDate"];
+    for (var i = 0; i < fields.length; i++) {
+        var el = document.getElementById(fields[i]);
+        if (el) el.addEventListener("input", checkForm);
+    }
+    checkForm();
+})();
 async function saveCat() {
     try {
         const br = await api("/branches?merchant_id=" + user.merchant_id);
     const branchId = (br.code === 0 && br.data && br.data.length > 0) ? br.data[0].id : 0;
+    if (!checkForm()) { alert("请填写所有必填项"); return; }
     const body = {
         merchant_id: user.merchant_id || 0,
+        branch_id: branchId,
+        branch_id: branchId,
         name: document.getElementById("name").value,
         breed: document.getElementById("breed").value || null,
         color: document.getElementById("color").value || null,
